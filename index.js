@@ -29,6 +29,19 @@ var compCities = {
     } else {
       return null
     }
+  },
+  GetStatesByShort: (shortName) => {
+    if (typeof db[shortName] !== 'undefined') {
+      let res = []
+      if (typeof db[shortName].states !== 'undefined') {
+        res = Object.keys(db[shortName].states)
+        return res
+      } else {
+        return null
+      }
+    } else {
+      return null
+    }
   }
 }
 

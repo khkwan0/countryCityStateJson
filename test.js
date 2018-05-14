@@ -1,4 +1,4 @@
-const db = require('./lib')
+const db = require('.')
 
 console.log('GetAll()')
 console.log(Object.keys(db.GetAll()).length)
@@ -8,3 +8,5 @@ console.log('GetCountryByShort("US")')
 console.log(db.GetCountryByShort('US'))
 console.log('GetCountryInfoByShort("US")')
 console.log(db.GetCountryInfoByShort('US'))
+console.log('GetStatesByShort("US")')
+console.log(db.GetStatesByShort('US'))
