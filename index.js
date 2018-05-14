@@ -42,6 +42,21 @@ var compCities = {
     } else {
       return null
     }
+  },
+  GetCities: (shortName, state) => {
+    if (typeof db[shortName] !== 'undefined') {
+      if (typeof db[shortName].states != 'undefined') {
+        let res=[]
+        for (let idx in  db[shortName].states[state]) {
+          res.push(db[shortName].states[state][idx].name)
+        }
+        return res
+      } else {
+        return null
+      }
+    } else {
+      return null
+    }
   }
 }
 

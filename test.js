@@ -10,3 +10,6 @@ console.log('GetCountryInfoByShort("US")')
 console.log(db.GetCountryInfoByShort('US'))
 console.log('GetStatesByShort("US")')
 console.log(db.GetStatesByShort('US'))
+console.log('GetCities("US", "Kentucky")')
+console.log(db.GetCities('US', 'Kentucky'))
+ 
