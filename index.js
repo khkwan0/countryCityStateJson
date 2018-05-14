@@ -1,4 +1,4 @@
-const db = require('./compiledCities.json')
+const db = require('./lib/compiledCities.json')
 
 var compCities = {
 
