@@ -1,6 +1,6 @@
 {
   "name": "countrycitystatejson",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A JSON Object containing Countries and their associated States/Provinces and cities.",
   "main": "index.js",
   "scripts": {
