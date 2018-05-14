@@ -1,8 +1,8 @@
 {
   "name": "countrycitystatejson",
-  "version": "1.0.0",
+  "version": "0.1.5",
   "description": "A JSON Object containing Countries and their associated States/Provinces and cities.",
-  "main": "compilecountries.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
