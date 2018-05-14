@@ -7,10 +7,10 @@ JSON formatted data containing the world's countries, states/provinces, and citi
 const yourhandle= require('countrycitystatejson')
 ```
 
-## yourhandle.GetAll()
+## yourhandle.getAll()
 Returns entire DB in JSON format.  ~ 2.5MB
 
-## yourhandle.GetCountriesShort()
+## yourhandle.getCountriesShort()
 Returns an array of Countries' short names:
 ```
 [ 'AD',
@@ -23,11 +23,11 @@ Returns an array of Countries' short names:
 ]
 ```
 
-## yourhandle.GetCountryByShort(shortName)
+## yourhandle.getCountryByShort(shortName)
 Returns an object containing country data, as well as an embedded object with the state/province name as the key, where the value is an array of cities.
 
 ```
-yourhandle.GetCountryByShort('US')
+yourhandle.getCountryByShort('US')
 
 { name: 'United States',
   native: 'United States',
@@ -49,17 +49,17 @@ yourhandle.GetCountryByShort('US')
 }
 ```
 
-## yourhandle.GetCountryInfoByShort(shortName)
+## yourhandle.getCountryInfoByShort(shortName)
 Returns the same object as above except without the states property.
 
-## yourhandle.GetStatesByShort(shortName)
+## yourhandle.getStatesByShort(shortName)
 For a given country short name, returns an array of the list of states
 
-## yourhandle.GetCities(shortName, state)
+## yourhandle.getCities(shortName, state)
 Parameters: Country short name and the name of the state matching the result of GetStatesByShort.  See Above.  Returns an array of cities belonging to the given state/province.
 
 ```
-yourhandle.GetCities('US','Kentucky')
+yourhandle.getCities('US','Kentucky')
 
 [ 'Albany',
   'Ashland',

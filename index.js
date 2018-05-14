@@ -2,22 +2,22 @@ const db = require('./lib/compiledCities.json')
 
 var compCities = {
 
-  GetAll: () => { return db },
-  GetCountriesShort: () => {
+  getAll: () => { return db },
+  getCountriesShort: () => {
     let res = []
     for (var key in db) {
       res.push(key)
     }
     return res
   },
-  GetCountryByShort: (shortName) => {
+  getCountryByShort: (shortName) => {
     if (typeof db[shortName] !== 'undefined') {
       return db[shortName]
     } else {
       return null
     }
   },
-  GetCountryInfoByShort: (shortName) => {
+  getCountryInfoByShort: (shortName) => {
     if (typeof db[shortName] !== 'undefined') {
       let res = {}
       for (var key in db[shortName]) {
@@ -30,7 +30,7 @@ var compCities = {
       return null
     }
   },
-  GetStatesByShort: (shortName) => {
+  getStatesByShort: (shortName) => {
     if (typeof db[shortName] !== 'undefined') {
       let res = []
       if (typeof db[shortName].states !== 'undefined') {
@@ -43,7 +43,7 @@ var compCities = {
       return null
     }
   },
-  GetCities: (shortName, state) => {
+  getCities: (shortName, state) => {
     if (typeof db[shortName] !== 'undefined') {
       if (typeof db[shortName].states != 'undefined') {
         let res=[]
