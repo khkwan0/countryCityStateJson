@@ -57,6 +57,20 @@ var compCities = {
     } else {
       return null
     }
+  },
+  getCountries: () => {
+    let res = []
+    for (var shortName in db) {
+      let obj = {}
+      for (var key in db[shortName]) {
+        if (key !== 'states') {
+          obj.shortName = shortName
+          obj[key] = db[shortName][key]
+        }
+      }
+      res.push(obj)
+    }
+    return res
   }
 }
 

@@ -10,6 +10,46 @@ const yourhandle= require('countrycitystatejson')
 ## yourhandle.getAll()
 Returns entire DB in JSON format.  ~ 2.5MB
 
+## yourhandle.getCountries()
+Returns all countries with their associated information as well as their short name (Country abbreviation)
+
+```
+[
+...
+	{ shortName: 'HK',
+    name: 'Hong Kong',
+    native: '香港',
+    phone: '852',
+    continent: 'AS',
+    capital: 'City of Victoria',
+    currency: 'HKD',
+    languages: [ 'zh', 'en' ],
+    emoji: '🇭🇰',
+    emojiU: 'U+1F1ED U+1F1F0' },
+  { shortName: 'HM',
+    name: 'Heard Island and McDonald Islands',
+    native: 'Heard Island and McDonald Islands',
+    phone: '61',
+    continent: 'AN',
+    capital: '',
+    currency: 'AUD',
+    languages: [ 'en' ],
+    emoji: '🇭🇲',
+    emojiU: 'U+1F1ED U+1F1F2' },
+  { shortName: 'HN',
+    name: 'Honduras',
+    native: 'Honduras',
+    phone: '504',
+    continent: 'NA',
+    capital: 'Tegucigalpa',
+    currency: 'HNL',
+    languages: [ 'es' ],
+    emoji: '🇭🇳',
+    emojiU: 'U+1F1ED U+1F1F3' },
+	...
+]
+```
+
 ## yourhandle.getCountriesShort()
 Returns an array of Countries' short names:
 ```
