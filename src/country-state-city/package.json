@@ -1,0 +1,58 @@
+{
+  "_from": "country-state-city",
+  "_id": "country-state-city@0.0.5",
+  "_inBundle": false,
+  "_integrity": "sha1-KtN1Ab/PdEQnDu8M3sygBGcF+tI=",
+  "_location": "/country-state-city",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "country-state-city",
+    "name": "country-state-city",
+    "escapedName": "country-state-city",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/country-state-city/-/country-state-city-0.0.5.tgz",
+  "_shasum": "2ad37501bfcf7444270eef0cdecca0046705fad2",
+  "_spec": "country-state-city",
+  "_where": "/home/ken/tourney.fun/countryCityStateJson",
+  "author": {
+    "name": "harpreetkhalsagtbit@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/harpreetkhalsagtbit/country-state-city/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Library for fetching Country, its States and Cities",
+  "directories": {
+    "lib": "lib"
+  },
+  "homepage": "https://github.com/harpreetkhalsagtbit/country-state-city#readme",
+  "keywords": [
+    "Country",
+    "State",
+    "City",
+    "GeoLocation",
+    "Search",
+    "Filter"
+  ],
+  "license": "GPL-3.0",
+  "main": "index.js",
+  "name": "country-state-city",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harpreetkhalsagtbit/country-state-city.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.0.5"
+}

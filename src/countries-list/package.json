@@ -1,0 +1,81 @@
+{
+  "_from": "countries-list",
+  "_id": "countries-list@2.3.2",
+  "_inBundle": false,
+  "_integrity": "sha512-krycuc2+OLaoMgUk30/mkmM7GtLn1cx25umFjJr7k1O/wusWRi0UcTdYm2/4+Ei5dz0EBau7PWJQWJYQ+wsEiw==",
+  "_location": "/countries-list",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "countries-list",
+    "name": "countries-list",
+    "escapedName": "countries-list",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/countries-list/-/countries-list-2.3.2.tgz",
+  "_shasum": "9306d1d98e141f81abfa2649e291ceaa2f6c0c4e",
+  "_spec": "countries-list",
+  "_where": "/home/ken/tourney.fun/countryCityStateJson",
+  "author": {
+    "name": "Dmytro",
+    "email": "z@annexare.com",
+    "url": "https://github.com/z-ax"
+  },
+  "bugs": {
+    "url": "https://github.com/annexare/Countries/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Continents & countries: ISO 3166-1 alpha-2 code, name, ISO 639-1 languages, capital, currency, native name, phone. JSON, CSV and SQL.",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.14.0",
+    "gulp": "^3.9.1",
+    "punycode": "^2.1.0",
+    "uglifyjs-webpack-plugin": "^1.1.6",
+    "webpack": "^3.10.0"
+  },
+  "devEngines": {
+    "node": ">=6.4"
+  },
+  "homepage": "http://annexare.github.io/Countries/",
+  "keywords": [
+    "country",
+    "countries",
+    "continent",
+    "emoji",
+    "languages",
+    "capital",
+    "currency",
+    "data",
+    "csv",
+    "json",
+    "sql",
+    "typings",
+    "ISO 3166-1",
+    "ISO 639-1",
+    "node"
+  ],
+  "license": "MIT",
+  "main": "./dist/index.es5.min.js",
+  "name": "countries-list",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/annexare/Countries.git"
+  },
+  "scripts": {
+    "eslint": "eslint gulpfile.js; exit 0",
+    "start": "gulp"
+  },
+  "typings": "./dist/index.d.ts",
+  "version": "2.3.2"
+}
