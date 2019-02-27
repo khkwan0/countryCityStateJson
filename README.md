@@ -113,6 +113,8 @@ yourhandle.getCities('US','Kentucky')
   ...
 ]
 ```
+# Editing and adding data to origin sources
+The data sources have been included in the './src' folder.  Editing or updating the sources will require a recompile.  The recompile script is under lib.
 
 # What? Why?
 
