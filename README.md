@@ -122,7 +122,9 @@ For cities and states, you will want to edit ./src/country-state-city/lib/city.j
 
 Editing or updating the sources will require a recompile.  The recompile script is under lib.  Just run
 
-$ node compilecounties.js and it will write out to compiledCities.json (hardcoded file name).
+$ node compilecounties.js 
+
+and it will write out to compiledCities.json (hardcoded file name).
 
 compiledCities.json is where the convencience functions (see above) read from.
 
