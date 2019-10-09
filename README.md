@@ -2,6 +2,9 @@
 
 JSON formatted data containing the world's countries, states/provinces, and cities.
 
+#NPM
+https://www.npmjs.com/package/countrycitystatejson
+
 # Usage
 ```
 const yourhandle= require('countrycitystatejson')
