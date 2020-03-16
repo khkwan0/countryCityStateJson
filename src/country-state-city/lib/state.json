@@ -15671,6 +15671,18 @@
 	"name": "Yorkshire",
 	"country_id": "230"
 }, {
+  "id":"3919a",
+  "name": "AA",
+  "country_id": "231"
+}, {
+  "id":"3919b",
+  "name": "AE",
+  "country_id": "231"
+}, {
+  "id":"3919c",
+  "name": "AP",
+  "country_id": "231"
+}, {
 	"id": "3919",
 	"name": "Alabama",
 	"country_id": "231"
