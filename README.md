@@ -119,15 +119,16 @@ yourhandle.getCities('US','Kentucky')
 # Editing and adding data to origin sources
 Found an error, missing data?  No problem.  The original data set was pulled from other npm packages.  They are indeed not 100% complete and not 100% error free.
 
-The data sources have been included in the './src' folder.  For example, if you need to edit country information, you will want to edit ./src/countries-list/dist/countries.json.
+The data sources have been included in the './src' folder.  For example, if you need to edit country information, you will want to edit `./src/countries-list/dist/countries.json`.
 
-For cities and states, you will want to edit ./src/country-state-city/lib/city.json or state.json.  Notice that in state.json there is a id element.  That "id" element is indexed in city.json to form a relationship.  So if you want to add a city and connect it the state, find, the state in state.json, get the "id" value and set that as the state id in the city.json file.
+For cities and states, you will want to edit `./src/country-state-city/lib/city.json` or `state.json`.  Notice that in state.json there is a id element.  That "id" element is indexed in city.json to form a relationship.  So if you want to add a city and connect it the state, find, the state in state.json, get the "id" value and set that as the state id in the city.json file.
 
 Editing or updating the sources will require a recompile.  The recompile script is under lib.  Just run
+```bash
+$ node compilecountries.js
+```
 
-$ node compilecounties.js 
-
-and it will write out to compiledCities.json (hardcoded file name).
+and it will write out to `compiledCities.json` (hardcoded file name).
 
 compiledCities.json is where the convencience functions (see above) read from.
 
