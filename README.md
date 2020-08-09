@@ -5,6 +5,9 @@ JSON formatted data containing the world's countries, states/provinces, and citi
 #NPM
 https://www.npmjs.com/package/countrycitystatejson
 
+#Recent Changes
+More accurate Nigerian states and cities.  (Thanks TheoOkafor)
+
 # Usage
 ```
 const yourhandle= require('countrycitystatejson')
