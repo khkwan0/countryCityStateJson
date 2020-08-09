@@ -193436,7 +193436,7 @@
 	"state_id": "2671"
 }, {
 	"id": "48345",
-	"name": "Oworosoki",
+	"name": "Oworonshoki",
 	"state_id": "2671"
 }, {
 	"id": "48346",
@@ -193462,5 +193462,197 @@
 	"id": "48351",
 	"name": "Kosofe",
 	"state_id": "2671"
+}, {
+	"id": "48352",
+	"name": "Uyo",
+	"state_id": "2650"
+}, {
+	"id": "48353",
+	"name": "Eket",
+	"state_id": "2650"
+}, {
+	"id": "48354",
+	"name": "Ikot Ekpene",
+	"state_id": "2650"
+}, {
+	"id": "48355",
+	"name": "Ikot Abasi",
+	"state_id": "2650"
+}, {
+	"id": "48356",
+	"name": "Oron",
+	"state_id": "2650"
+}, {
+	"id": "48357",
+	"name": "Oruk Anam",
+	"state_id": "2650"
+}, {
+	"id": "48358",
+	"name": "Ibiono Ibom",
+	"state_id": "2650"
+}, {
+	"id": "48359",
+	"name": "Nsit Ubiom",
+	"state_id": "2650"
+}, {
+	"id": "48360",
+	"name": "Nsit Ibom",
+	"state_id": "2650"
+}, {
+	"id": "48361",
+	"name": "Abak",
+	"state_id": "2650"
+}, {
+	"id": "48362",
+	"name": "Ibeno",
+	"state_id": "2650"
+}, {
+	"id": "48363",
+	"name": "Abatete",
+	"state_id": "2651"
+}, {
+	"id": "48364",
+	"name": "Ogidi",
+	"state_id": "2651"
+}, {
+	"id": "48365",
+	"name": "Nkwelle Ezunaka",
+	"state_id": "2651"
+}, {
+	"id": "48366",
+	"name": "Ojoto",
+	"state_id": "2651"
+}, {
+	"id": "48367",
+	"name": "Oba",
+	"state_id": "2651"
+}, {
+	"id": "48368",
+	"name": "Nsugbe",
+	"state_id": "2651"
+}, {
+	"id": "48369",
+	"name": "Aguleri",
+	"state_id": "2651"
+}, {
+	"id": "48370",
+	"name": "Anam",
+	"state_id": "2651"
+}, {
+	"id": "48371",
+	"name": "Otuocha",
+	"state_id": "2651"
+}, {
+	"id": "48372",
+	"name": "Atani",
+	"state_id": "2651"
+}, {
+	"id": "48373",
+	"name": "Calabar",
+	"state_id": "2656"
+}, {
+	"id": "48374",
+	"name": "Ikom",
+	"state_id": "2656"
+}, {
+	"id": "48375",
+	"name": "Ogoja",
+	"state_id": "2656"
+}, {
+	"id": "48376",
+	"name": "Ugep",
+	"state_id": "2656"
+}, {
+	"id": "48377",
+	"name": "Obudu",
+	"state_id": "2656"
+}, {
+	"id": "48378",
+	"name": "Sankwala",
+	"state_id": "2656"
+}, {
+	"id": "48379",
+	"name": "Ikot Offiong",
+	"state_id": "2656"
+}, {
+	"id": "48380",
+	"name": "Ekong",
+	"state_id": "2656"
+}, {
+	"id": "48381",
+	"name": "Abuja",
+	"state_id": "2648"
+}, {
+	"id": "48382",
+	"name": "Abaji",
+	"state_id": "2648"
+}, {
+	"id": "48383",
+	"name": "Bwari",
+	"state_id": "2648"
+}, {
+	"id": "48384",
+	"name": "Gwagwalada",
+	"state_id": "2648"
+}, {
+	"id": "48385",
+	"name": "Kubwa",
+	"state_id": "2648"
+}, {
+	"id": "48386",
+	"name": "Kuje",
+	"state_id": "2648"
+}, {
+	"id": "48387",
+	"name": "Kwali",
+	"state_id": "2648"
+}, {
+	"id": "48388",
+	"name": "Zuba",
+	"state_id": "2648"
+}, {
+	"id": "48389",
+	"name": "Dei dei",
+	"state_id": "2648"
+}, {
+	"id": "48390",
+	"name": "Orlu",
+	"state_id": "2663"
+}, {
+	"id": "48391",
+	"name": "Mbaise",
+	"state_id": "2663"
+}, {
+	"id": "48392",
+	"name": "Ohaji/Egbema",
+	"state_id": "2663"
+}, {
+	"id": "48393",
+	"name": "Ngor Okpala",
+	"state_id": "2663"
+}, {
+	"id": "48394",
+	"name": "Mgbidi",
+	"state_id": "2663"
+}, {
+	"id": "48395",
+	"name": "Izombe",
+	"state_id": "2663"
+}, {
+	"id": "48396",
+	"name": "Isu",
+	"state_id": "2663"
+}, {
+	"id": "48397",
+	"name": "Mbaitoli",
+	"state_id": "2663"
+}, {
+	"id": "48398",
+	"name": "Orsu",
+	"state_id": "2663"
+}, {
+	"id": "48399",
+	"name": "Amaigbo",
+	"state_id": "2663"
 }
 ]
