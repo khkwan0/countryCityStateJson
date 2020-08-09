@@ -123972,7 +123972,7 @@
 	"state_id": "2671"
 }, {
 	"id": "30979",
-	"name": "Badagri",
+	"name": "Badagry",
 	"state_id": "2671"
 }, {
 	"id": "30980",
@@ -123984,7 +123984,7 @@
 	"state_id": "2671"
 }, {
 	"id": "30982",
-	"name": "Iganmi",
+	"name": "Iganmu",
 	"state_id": "2671"
 }, {
 	"id": "30983",
@@ -193314,4 +193314,153 @@
 	"id": "48314",
 	"name": "Summersville",
 	"state_id": "3976"
-}]
+}, {
+	"id": "48315",
+	"name": "Isolo",
+	"state_id": "2671"
+}, {
+	"id": "48316",
+	"name": "Ejigbo",
+	"state_id": "2671"
+}, {
+	"id": "48317",
+	"name": "Okota",
+	"state_id": "2671"
+}, {
+	"id": "48318",
+	"name": "Ilasamaja",
+	"state_id": "2671"
+}, {
+	"id": "48319",
+	"name": "Festac Town",
+	"state_id": "2671"
+}, {
+	"id": "48320",
+	"name": "Ijeshatedo",
+	"state_id": "2671"
+}, {
+	"id": "48321",
+	"name": "Amuwo Odofin",
+	"state_id": "2671"
+}, {
+	"id": "48322",
+	"name": "Ajegunle",
+	"state_id": "2671"
+}, {
+	"id": "48323",
+	"name": "Ojodu",
+	"state_id": "2671"
+}, {
+	"id": "48324",
+	"name": "Onigbongbo",
+	"state_id": "2671"
+}, {
+	"id": "48325",
+	"name": "Ojokoro",
+	"state_id": "2671"
+}, {
+	"id": "48326",
+	"name": "Ajah",
+	"state_id": "2671"
+}, {
+	"id": "48327",
+	"name": "Lekki",
+	"state_id": "2671"
+}, {
+	"id": "48328",
+	"name": "Eredo",
+	"state_id": "2671"
+}, {
+	"id": "48329",
+	"name": "Igando",
+	"state_id": "2671"
+}, {
+	"id": "48330",
+	"name": "Idimu",
+	"state_id": "2671"
+}, {
+	"id": "48331",
+	"name": "Egbe",
+	"state_id": "2671"
+}, {
+	"id": "48332",
+	"name": "Ipaja",
+	"state_id": "2671"
+}, {
+	"id": "48333",
+	"name": "Ayobo",
+	"state_id": "2671"
+}, {
+	"id": "48334",
+	"name": "Abule Egba",
+	"state_id": "2671"
+}, {
+	"id": "48335",
+	"name": "Agege",
+	"state_id": "2671"
+}, {
+	"id": "48336",
+	"name": "Ojota",
+	"state_id": "2671"
+}, {
+	"id": "48337",
+	"name": "Igbogbo",
+	"state_id": "2671"
+}, {
+	"id": "48338",
+	"name": "Ketu",
+	"state_id": "2671"
+}, {
+	"id": "48339",
+	"name": "Imota",
+	"state_id": "2671"
+}, {
+	"id": "48340",
+	"name": "Yaba",
+	"state_id": "2671"
+}, {
+	"id": "48341",
+	"name": "Bariga",
+	"state_id": "2671"
+}, {
+	"id": "48342",
+	"name": "Mushin",
+	"state_id": "2671"
+}, {
+	"id": "48343",
+	"name": "Oshodi",
+	"state_id": "2671"
+}, {
+	"id": "48344",
+	"name": "Gbagada",
+	"state_id": "2671"
+}, {
+	"id": "48345",
+	"name": "Oworosoki",
+	"state_id": "2671"
+}, {
+	"id": "48346",
+	"name": "Maryland",
+	"state_id": "2671"
+}, {
+	"id": "48347",
+	"name": "Egbeda",
+	"state_id": "2671"
+}, {
+	"id": "48348",
+	"name": "Alimosho",
+	"state_id": "2671"
+}, {
+	"id": "48349",
+	"name": "Ogba",
+	"state_id": "2671"
+}, {
+	"id": "48350",
+	"name": "Somolu",
+	"state_id": "2671"
+}, {
+	"id": "48351",
+	"name": "Kosofe",
+	"state_id": "2671"
+}
+]
