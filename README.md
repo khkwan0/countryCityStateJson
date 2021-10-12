@@ -8,6 +8,7 @@ https://www.npmjs.com/package/countrycitystatejson
 # Recent Changes
 
 2021-10-13 Added getCitiesByName method.
+
 More accurate Nigerian states and cities.  (Thanks TheoOkafor)
 
 # Usage
