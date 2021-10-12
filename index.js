@@ -71,7 +71,20 @@ var compCities = {
       res.push(obj)
     }
     return res
-  }
+  },
+  getCitiesByName: name => {
+    const TrieSearch = require('trie-search')
+    const trie = new TrieSearch()
+    for (let countryName in db) {
+      for (let state in db[countryName].states) {
+        for (let idx in db[countryName].states[state]) {
+          trie.map(db[countryName].states[state][idx].name.toLowerCase(), db[countryName].states[state][idx])
+        }
+      }
+    }
+    const res = trie.search(name.toLowerCase())
+    return res
+  },
 }
 
 module.exports = compCities

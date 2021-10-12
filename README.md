@@ -6,6 +6,7 @@ JSON formatted data containing the world's countries, states/provinces, and citi
 https://www.npmjs.com/package/countrycitystatejson
 
 #Recent Changes
+2021-10-13 Added getCitiesByName method.
 More accurate Nigerian states and cities.  (Thanks TheoOkafor)
 
 # Usage
@@ -15,6 +16,7 @@ const yourhandle= require('countrycitystatejson')
 
 ## yourhandle.getAll()
 Returns entire DB in JSON format.  ~ 2.5MB
+
 
 ## yourhandle.getCountries()
 Returns all countries with their associated information as well as their short name (Country abbreviation)
@@ -117,6 +119,21 @@ yourhandle.getCities('US','Kentucky')
   'Covington',
   'Crescent Springs',
   ...
+]
+
+```
+## yourhandle.getCitiesByName(cityName) // this is not cheap
+```
+yourhandle.getCitiesByName('lexington')
+
+[
+  { id: '44606', name: 'Lexington', state_id: '3938' },
+  { id: '44841', name: 'Lexington Park', state_id: '3942' },
+  { id: '44970', name: 'Lexington', state_id: '3943' },
+  { id: '45561', name: 'Lexington', state_id: '3950' },
+  { id: '48179', name: 'Lexington', state_id: '3957' },
+  { id: '48249', name: 'Lexington', state_id: '3966' },
+  { id: '44607', name: 'Lexington-Fayette', state_id: '3938' }
 ]
 ```
 # Editing and adding data to origin sources

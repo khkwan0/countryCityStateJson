@@ -14,4 +14,5 @@ console.log('getCities("US", "Kentucky")')
 console.log(db.getCities('US', 'New York'))
 console.log('getCountries()')
 console.log(db.getCountries())
- 
+console.log('getCitiesByName("lexington")')
+console.log(db.getCitiesByName('lexington'))
