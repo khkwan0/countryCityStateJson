@@ -78,7 +78,12 @@ var compCities = {
     for (let countryName in db) {
       for (let state in db[countryName].states) {
         for (let idx in db[countryName].states[state]) {
-          trie.map(db[countryName].states[state][idx].name.toLowerCase(), db[countryName].states[state][idx])
+          const toSave = {
+            city: db[countryName].states[state][idx],
+            state: state,
+            country: db[countryName],
+          }
+          trie.map(db[countryName].states[state][idx].name.toLowerCase(), toSave)
         }
       }
     }
