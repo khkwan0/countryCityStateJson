@@ -83,11 +83,13 @@ var compCities = {
             state: state,
             country: db[countryName],
           }
-          trie.map(db[countryName].states[state][idx].name.toLowerCase(), toSave)
+          const key = db[countryName].states[state][idx].name.toLowerCase().replace(/\s/g,'')
+          trie.map(key, toSave)
         }
       }
     }
-    const res = trie.search(name.toLowerCase())
+    let searchTerm = name.toLowerCase().replace(/\s/g,'')
+    const res = trie.search(searchTerm)
     return res
   },
 }

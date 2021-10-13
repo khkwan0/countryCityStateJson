@@ -1,5 +1,5 @@
 const db = require('.')
-
+/*
 console.log('getAll()')
 console.log(Object.keys(db.getAll()).length)
 console.log('getCountriesShort()')
@@ -14,5 +14,6 @@ console.log('getCities("US", "Kentucky")')
 console.log(db.getCities('US', 'New York'))
 console.log('getCountries()')
 console.log(db.getCountries())
-console.log('getCitiesByName("lexington")')
-console.log(db.getCitiesByName('lexington'))
+*/
+console.log('getCitiesByName("New York")')
+console.log(db.getCitiesByName('New York'))
