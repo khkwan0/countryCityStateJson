@@ -1,4 +1,28 @@
 const db = require('./lib/compiledCities.json')
+const TrieSearch = require('trie-search')
+
+const trie = new TrieSearch([],
+  {
+    min: 2,
+    splitOnRegEx: false,
+  }
+)
+
+
+for (let countryName in db) {
+  for (let state in db[countryName].states) {
+    for (let idx in db[countryName].states[state]) {
+      const toSave = {
+        city: db[countryName].states[state][idx],
+        state: state,
+        country: db[countryName],
+      }
+//      const key = db[countryName].states[state][idx].name.toLowerCase().replace(/\s/g,'')
+      const key = db[countryName].states[state][idx].name
+      trie.map(key, toSave)
+    }
+  }
+}
 
 var compCities = {
 
@@ -73,23 +97,7 @@ var compCities = {
     return res
   },
   getCitiesByName: name => {
-    const TrieSearch = require('trie-search')
-    const trie = new TrieSearch()
-    for (let countryName in db) {
-      for (let state in db[countryName].states) {
-        for (let idx in db[countryName].states[state]) {
-          const toSave = {
-            city: db[countryName].states[state][idx],
-            state: state,
-            country: db[countryName],
-          }
-          const key = db[countryName].states[state][idx].name.toLowerCase().replace(/\s/g,'')
-          trie.map(key, toSave)
-        }
-      }
-    }
-    let searchTerm = name.toLowerCase().replace(/\s/g,'')
-    const res = trie.search(searchTerm)
+    const res = trie.search(name)
     return res
   },
 }

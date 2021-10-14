@@ -17,3 +17,5 @@ console.log(db.getCountries())
 */
 console.log('getCitiesByName("New York")')
 console.log(db.getCitiesByName('New York'))
+//console.log('getCitiesByName("lexington")')
+//console.log(db.getCitiesByName('lexington'))

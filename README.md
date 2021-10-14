@@ -6,10 +6,9 @@ JSON formatted data containing the world's countries, states/provinces, and citi
 https://www.npmjs.com/package/countrycitystatejson
 
 # Recent Changes
-
-2021-10-13 Added getCitiesByName method.
-
-More accurate Nigerian states and cities.  (Thanks TheoOkafor)
+`2021-10-14 Some optimizations`
+`2021-10-13 Added getCitiesByName method.`
+`More accurate Nigerian states and cities.  (Thanks TheoOkafor)`
 
 # Usage
 ```
