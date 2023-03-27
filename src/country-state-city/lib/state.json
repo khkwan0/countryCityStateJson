@@ -9240,7 +9240,7 @@
 	"country_id": "133"
 }, {
 	"id": "2334",
-	"name": "Haa Dhaal",
+	"name": "Haa Dhaalu",
 	"country_id": "133"
 }, {
 	"id": "2335",
@@ -16362,4 +16362,32 @@
 	"id": "4120",
 	"name": "Midlands",
 	"country_id": "246"
+}, {
+	"id": "4121",
+	"name": "Upper North Province",
+	"country_id": "133"
+}, {
+	"id": "4122",
+	"name": "North Province",
+	"country_id": "133"
+}, {
+	"id": "4123",
+	"name": "North Central Province",
+	"country_id": "133"
+}, {
+	"id": "4124",
+	"name": "Central Province",
+	"country_id": "133"
+}, {
+	"id": "4125",
+	"name": "South Central Province",
+	"country_id": "133"
+}, {
+	"id": "4126",
+	"name": "Upper South Province",
+	"country_id": "133"
+}, {
+	"id": "4127",
+	"name": "South Province",
+	"country_id": "133"
 }]
