@@ -7,7 +7,8 @@ https://www.npmjs.com/package/countrycitystatejson
 
 # Recent Changes
 ```
-2022-10-21 Fixed some Austrailian city and state information.  (Thanks andrewjdavidson)
+2023-02-15 More fixes to Australian cities. (Thanks again andrewjdavidson)
+2022-10-21 Fixed some Australian city and state information.  (Thanks andrewjdavidson)
 2021-10-14 Some optimizations
 2021-10-13 Added getCitiesByName method.
 More accurate Nigerian states and cities.  (Thanks TheoOkafor)
