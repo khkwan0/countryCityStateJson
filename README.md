@@ -7,6 +7,7 @@ https://www.npmjs.com/package/countrycitystatejson
 
 # Recent Changes
 ```
+2024-12-29 Fixes to Turkey (Had extra states that don't belong - Thanks Sinan997)
 2023-03-27 Fixes to Maldives
 2023-02-15 More fixes to Australian cities. (Thanks again andrewjdavidson)
 2022-10-21 Fixed some Australian city and state information.  (Thanks andrewjdavidson)
