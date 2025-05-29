@@ -2,9 +2,17 @@
   "name": "countrycitystatejson",
   "version": "25.05.29",
   "description": "A JSON Object containing Countries and their associated States/Provinces and cities.",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/types/index.d.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
+  "type": "module",
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
