@@ -19,12 +19,6 @@ More accurate Nigerian states and cities.  (Thanks TheoOkafor)
 
 # Usage
 ```
-ES:
-import csj from 'countrycitystatejson'
-
-Tree shake:
-Example - import {getAll, getCountries} from 'countrycitystatejson'
-
 CJS:
 const yourhandle = require('countrycitystatejson')
 ```
