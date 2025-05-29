@@ -1,8 +1,18 @@
 {
   "compilerOptions": {
-    "typeRoots": ["./node_modules/@types", "./types"],
-    "resolveJsonModule": true,
+    "target": "ES2024",                  // Modern JS target
+    "outDir": "./dist",                  // Output folder for compiled JS
+    "declaration": true,                 // Generate .d.ts files for typings
+    "declarationDir": "./dist/types",   // Output folder for typings
+    "strict": true,
     "esModuleInterop": true,
-    "moduleResolution": "node"
-  }
-} 
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src"]
+}

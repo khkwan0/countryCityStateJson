@@ -14,6 +14,7 @@ export interface Country {
 
 export interface Database {
   [key: string]: Country;
+  [key: number]: Country;
 }
 
 export interface CountryInfo {

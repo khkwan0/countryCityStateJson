@@ -1,34 +1,37 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var compiledCities_json_1 = require("./lib/compiledCities.json");
-var trie_search_1 = require("trie-search");
-var trie = new trie_search_1.default([], {
+const compiledCities_json_1 = __importDefault(require("../lib/compiledCities.json"));
+const trie_search_1 = __importDefault(require("trie-search"));
+const trie = new trie_search_1.default([], {
     min: 2,
     splitOnRegEx: false,
 });
-for (var countryName in compiledCities_json_1.default) {
-    for (var state in compiledCities_json_1.default[countryName].states) {
-        for (var idx in compiledCities_json_1.default[countryName].states[state]) {
-            var toSave = {
+for (let countryName in compiledCities_json_1.default) {
+    for (let state in compiledCities_json_1.default[countryName].states) {
+        for (let idx in compiledCities_json_1.default[countryName].states[state]) {
+            const toSave = {
                 city: compiledCities_json_1.default[countryName].states[state][idx],
                 state: state,
                 country: compiledCities_json_1.default[countryName],
             };
-            var key = compiledCities_json_1.default[countryName].states[state][idx].name;
+            const key = compiledCities_json_1.default[countryName].states[state][idx].name;
             trie.map(key, toSave);
         }
     }
 }
-var compCities = {
-    getAll: function () { return compiledCities_json_1.default; },
-    getCountriesShort: function () {
-        var res = [];
-        for (var key in compiledCities_json_1.default) {
+const compCities = {
+    getAll: () => { return compiledCities_json_1.default; },
+    getCountriesShort: () => {
+        const res = [];
+        for (const key in compiledCities_json_1.default) {
             res.push(key);
         }
         return res;
     },
-    getCountryByShort: function (shortName) {
+    getCountryByShort: (shortName) => {
         if (typeof compiledCities_json_1.default[shortName] !== 'undefined') {
             return compiledCities_json_1.default[shortName];
         }
@@ -36,10 +39,10 @@ var compCities = {
             return null;
         }
     },
-    getCountryInfoByShort: function (shortName) {
+    getCountryInfoByShort: (shortName) => {
         if (typeof compiledCities_json_1.default[shortName] !== 'undefined') {
-            var res = {};
-            for (var key in compiledCities_json_1.default[shortName]) {
+            const res = {};
+            for (const key in compiledCities_json_1.default[shortName]) {
                 if (key !== 'states') {
                     res[key] = compiledCities_json_1.default[shortName][key];
                 }
@@ -50,7 +53,7 @@ var compCities = {
             return null;
         }
     },
-    getStatesByShort: function (shortName) {
+    getStatesByShort: (shortName) => {
         if (typeof compiledCities_json_1.default[shortName] !== 'undefined') {
             if (typeof compiledCities_json_1.default[shortName].states !== 'undefined') {
                 return Object.keys(compiledCities_json_1.default[shortName].states);
@@ -63,11 +66,11 @@ var compCities = {
             return null;
         }
     },
-    getCities: function (shortName, state) {
+    getCities: (shortName, state) => {
         if (typeof compiledCities_json_1.default[shortName] !== 'undefined') {
             if (typeof compiledCities_json_1.default[shortName].states !== 'undefined') {
-                var res = [];
-                for (var idx in compiledCities_json_1.default[shortName].states[state]) {
+                const res = [];
+                for (const idx in compiledCities_json_1.default[shortName].states[state]) {
                     res.push(compiledCities_json_1.default[shortName].states[state][idx].name);
                 }
                 return res;
@@ -80,11 +83,11 @@ var compCities = {
             return null;
         }
     },
-    getCountries: function () {
-        var res = [];
-        for (var shortName in compiledCities_json_1.default) {
-            var obj = { shortName: shortName };
-            for (var key in compiledCities_json_1.default[shortName]) {
+    getCountries: () => {
+        const res = [];
+        for (const shortName in compiledCities_json_1.default) {
+            const obj = { shortName };
+            for (const key in compiledCities_json_1.default[shortName]) {
                 if (key !== 'states') {
                     obj[key] = compiledCities_json_1.default[shortName][key];
                 }
@@ -93,7 +96,7 @@ var compCities = {
         }
         return res;
     },
-    getCitiesByName: function (name) {
+    getCitiesByName: (name) => {
         return trie.search(name);
     },
 };

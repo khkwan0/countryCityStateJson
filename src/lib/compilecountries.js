@@ -1,5 +1,5 @@
-const cl = require('../src/countries-list')
-const csc = require('../src/country-state-city')
+const cl = require('../countries-list/dist')
+const csc = require('../country-state-city')
 const fs = require('fs')
 
 let newlist = {}
