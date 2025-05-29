@@ -1,9 +1,9 @@
 import db from './lib/compiledCities.json'
 import TrieSearch from 'trie-search'
-import { CitySearchResult, CountryInfo, Database } from '@/types'
+import { CitySearchResult, CountryInfo, Database } from './types/index.d.js'
 
 const typedDb = db as Database
-const trie = new TrieSearch([],
+const trie: TrieSearch<CitySearchResult> = new TrieSearch<CitySearchResult>('city',
   {
     min: 2,
     splitOnRegEx: false,

@@ -1,18 +1,10 @@
 {
   "compilerOptions": {
-    "target": "ES2024",                  // Modern JS target
-    "outDir": "./dist",                  // Output folder for compiled JS
-    "declaration": true,                 // Generate .d.ts files for typings
-    "declarationDir": "./dist/types",   // Output folder for typings
-    "strict": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true,
+    "outDir": "./dist",
     "resolveJsonModule": true,
+    "esModuleInterop": true,
     "paths": {
       "@/*": ["./src/*"]
     }
-  },
-  "include": ["src"]
+  }
 }

@@ -1,4 +1,4 @@
-import { getAll, getCitiesByName, getCountries, getCountryByShort, getCountriesShort, getCountryInfoByShort, getStatesByShort, getCities } from '../index';
+const { getAll, getCitiesByName, getCountries, getCountryByShort, getCountriesShort, getCountryInfoByShort, getStatesByShort, getCities } = require('../../dist/cjs/index.js');
 
 describe('Country State City JSON', () => {
   describe('getAll', () => {

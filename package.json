@@ -1,6 +1,6 @@
 {
   "name": "countrycitystatejson",
-  "version": "25.05.29",
+  "version": "25.05.291",
   "description": "A JSON Object containing Countries and their associated States/Provinces and cities.",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -14,8 +14,8 @@
   },
   "type": "module",
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
+    "test": "jest --config jest.config.cjs",
+    "test:watch": "jest --config jest.config.cjs --watch",
     "build": "tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs": "tsc -p tsconfig.cjs.json"
