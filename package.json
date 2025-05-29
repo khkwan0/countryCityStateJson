@@ -1,8 +1,9 @@
 {
   "name": "countrycitystatejson",
-  "version": "21.03.2703",
+  "version": "25.05.294",
   "description": "A JSON Object containing Countries and their associated States/Provinces and cities.",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,6 +11,11 @@
     "type": "git",
     "url": "git+https://github.com/khkwan0/countryCityStateJson.git"
   },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "lib"
+  ],
   "keywords": [
     "country",
     "city",
