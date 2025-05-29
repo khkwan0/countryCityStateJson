@@ -1,18 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ES2024",                  // Modern JS target
-    "outDir": "./dist",                  // Output folder for compiled JS
-    "declaration": true,                 // Generate .d.ts files for typings
-    "declarationDir": "./dist/types",   // Output folder for typings
-    "strict": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "module": "commonjs",
+    "lib": ["es5"],
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "baseUrl": "./",
+    "typeRoots": ["./"],
+    "types": [],
+    "noEmit": true,
   },
-  "include": ["src"]
-}
+  "files": ["index.d.ts"]
+} 
