@@ -1,4 +1,4 @@
-const db = require('.')
+const db = require('../src')
 /*
 console.log('getAll()')
 console.log(Object.keys(db.getAll()).length)

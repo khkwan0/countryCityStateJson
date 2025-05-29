@@ -7,6 +7,7 @@ https://www.npmjs.com/package/countrycitystatejson
 
 # Recent Changes
 ```
+2025-05-29 Added typescript, added jest testing.
 2024-12-29 Fixes to Turkey (Had extra states that don't belong - Thanks Sinan997)
 2023-03-27 Fixes to Maldives
 2023-02-15 More fixes to Australian cities. (Thanks again andrewjdavidson)
@@ -18,7 +19,14 @@ More accurate Nigerian states and cities.  (Thanks TheoOkafor)
 
 # Usage
 ```
-const yourhandle= require('countrycitystatejson')
+ES:
+import csj from 'countrycitystatejson'
+
+Tree shake:
+Example - import {getAll, getCountries} from 'countrycitystatejson'
+
+CJS:
+const yourhandle = require('countrycitystatejson')
 ```
 
 ## yourhandle.getAll()
