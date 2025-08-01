@@ -7,6 +7,7 @@ https://www.npmjs.com/package/countrycitystatejson
 
 # Recent Changes
 ```
+2025-09-01 Fixed errnoneous states for India, South Africa, and Mexico.  Added correct cities for Ciudad de Mexico
 2025-05-29 Added typescript definitions
 2024-12-29 Fixes to Turkey (Had extra states that don't belong - Thanks Sinan997)
 2023-03-27 Fixes to Maldives
