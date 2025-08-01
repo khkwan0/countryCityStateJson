@@ -193875,4 +193875,79 @@
   "id": "48453",
   "name": "Hithadhoo",
   "state_id": "4127"
+},
+{
+  "id": "48454",
+  "name": "Álvaro Obregón",
+  "state_id": "2435"
+},
+{
+  "id": "48455",
+  "name": "Azcapotzalco",
+  "state_id": "2435"
+},
+{
+  "id": "48456",
+  "name": "Benito Juárez",
+  "state_id": "2435"
+},
+{
+  "id": "48457",
+  "name": "Coyoacán",
+  "state_id": "2435"
+},
+{
+  "id": "48458",
+  "name": "Cuajimalpa de Morelos",
+  "state_id": "2435"
+},
+{
+  "id": "48459",
+  "name": "Cuauhtémoc",
+  "state_id": "2435"
+},
+{
+  "id": "48460",
+  "name": "Gustavo A. Madero",
+  "state_id": "2435"
+},
+{
+  "id": "48461",
+  "name": "Iztacalco",
+  "state_id": "2435"
+},
+{
+  "id": "48462",
+  "name": "Iztapalapa",
+  "state_id": "2435"
+},
+{
+  "id": "48463",
+  "name": "La Magdalena Contreras",
+  "state_id": "2435"
+},
+{
+  "id": "48464",
+  "name": "Miguel Hidalgo",
+  "state_id": "2435"
+},
+{
+  "id": "48465",
+  "name": "Milpa Alta",
+  "state_id": "2435"
+},
+{
+  "id": "48466",
+  "name": "Tláhuac",
+  "state_id": "2435"
+},
+{
+  "id": "48467",
+  "name": "Tlalpan",
+  "state_id": "2435"
+},
+{
+  "id": "48468",
+  "name": "Venustiano Carranza y Xochimilco",
+  "state_id": "2435"
 }]
