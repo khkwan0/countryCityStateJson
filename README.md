@@ -199,6 +199,14 @@ compiledCities.json is where the convenience functions (see above) read from.
 
 I hope this is clear so that any edits, fixes, and changes can be easily and quickly done by everyone.  Please, if you do have a fix, be sure to submit it, so we can share the fix with everyone.
 
+# CI
+
+See [docs/CI.md](docs/CI.md) for Jenkins (and other non-GitHub-Actions) setup. Developers can run the same checks locally with:
+
+```bash
+bash scripts/ci.sh
+```
+
 # What? Why?
 
 In my search for a good database in JSON format that contained Countries and their associated states and cities, I found disparate solutions.  
