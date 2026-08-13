@@ -1,3 +1,16 @@
+# Published package contents are controlled by package.json "files".
+# Keep local/dev-only paths out of accidental packs.
 test/
 coverage/
-src/
+src/countries-list/
+src/country-state-city/
+src/__tests__/
+src/index.ts
+src/countries.ts
+src/types/
+scripts/
+*.ts
+!dist/**/*.d.ts
+tsconfig*.json
+jest.config.js
+.github/

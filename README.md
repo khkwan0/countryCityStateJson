@@ -23,7 +23,12 @@ More accurate Nigerian states and cities.  (Thanks TheoOkafor)
 ```
 CJS:
 const yourhandle = require('countrycitystatejson')
+
+# Lightweight (countries + states only, no city lists):
+const countriesOnly = require('countrycitystatejson/countries')
 ```
+
+ESM / TypeScript builds are published under `dist/esm` and `dist/cjs`.
 
 ## yourhandle.getAll()
 Returns entire DB in JSON format.  ~ 2.5MB
@@ -154,14 +159,26 @@ The data sources have been included in the './src' folder.  For example, if you 
 
 For cities and states, you will want to edit `./src/country-state-city/lib/city.json` or `state.json`.  Notice that in state.json there is a id element.  That "id" element is indexed in city.json to form a relationship.  So if you want to add a city and connect it the state, find, the state in state.json, get the "id" value and set that as the state id in the city.json file.
 
-Editing or updating the sources will require a recompile.  The recompile script is under lib.  Just run
+Editing or updating the sources will require a recompile:
+
 ```bash
-$ node compilecountries.js
+$ npm run compile
 ```
 
-and it will write out to `compiledCities.json` (hardcoded file name).
+This runs `scripts/compile-data.js`, validates the merged dataset, and writes:
 
-compiledCities.json is where the convencience functions (see above) read from.
+- `src/lib/compiledCities.json` (full countries → states → cities)
+- `src/lib/compiledCountryAndStates.json` (countries → states only)
+- `lib/compiledCities.json` (compat copy)
+
+Then rebuild the library entrypoints:
+
+```bash
+$ npm run build
+$ npm test
+```
+
+compiledCities.json is where the convenience functions (see above) read from.
 
 I hope this is clear so that any edits, fixes, and changes can be easily and quickly done by everyone.  Please, if you do have a fix, be sure to submit it, so we can share the fix with everyone.
 
