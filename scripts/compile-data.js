@@ -13,6 +13,11 @@
  *   - src/lib/compiledCities.json
  *   - src/lib/compiledCountryAndStates.json
  *   - lib/compiledCities.json (compat copy for root index.js consumers)
+ *
+ * Note: compiledCities.json may contain curated corrections that are not yet
+ * fully represented in the vendored sources. Always review diffs for AR, IN,
+ * MX, TR, and ZA (and any other recently fixed regions) before committing a
+ * fresh compile.
  */
 
 const fs = require('fs')

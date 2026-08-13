@@ -24,7 +24,7 @@ More accurate Nigerian states and cities.  (Thanks TheoOkafor)
 CJS:
 const yourhandle = require('countrycitystatejson')
 
-# Lightweight (countries + states only, no city lists):
+// Lightweight (countries + states only, no city lists):
 const countriesOnly = require('countrycitystatejson/countries')
 ```
 
@@ -170,6 +170,8 @@ This runs `scripts/compile-data.js`, validates the merged dataset, and writes:
 - `src/lib/compiledCities.json` (full countries → states → cities)
 - `src/lib/compiledCountryAndStates.json` (countries → states only)
 - `lib/compiledCities.json` (compat copy)
+
+**Important:** some country fixes were applied directly to `compiledCities.json` over time. After changing sources, run `npm run compile` and carefully review the diff (especially `AR`, `IN`, `MX`, `TR`, `ZA`) before committing so curated corrections are not lost.
 
 Then rebuild the library entrypoints:
 
