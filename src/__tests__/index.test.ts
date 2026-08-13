@@ -8,19 +8,22 @@ import {
   getStatesByShort,
   getCities,
 } from '../index'
+import * as server from '../server'
 import {
   getAll as getAllLight,
   getCountriesShort as getCountriesShortLight,
   getStatesByShort as getStatesByShortLight,
   getCountryByShort as getCountryByShortLight,
 } from '../countries'
+import * as client from '../client'
 
-describe('Country State City JSON', () => {
+describe('Server / default entry (sync full dataset)', () => {
   describe('getAll', () => {
     it('should return all country data', () => {
       const countries = getAll()
       expect(countries).toBeDefined()
       expect(Object.keys(countries).length).toBeGreaterThan(200)
+      expect(server.getAll()).toBe(countries)
     })
   })
 
@@ -135,6 +138,39 @@ describe('Lightweight countries entry', () => {
 
     const all = getAllLight()
     expect(Object.keys(all).length).toBe(countries.length)
+  })
+})
+
+describe('Client entry (lazy per-country cities)', () => {
+  afterEach(() => {
+    client.clearClientCache()
+  })
+
+  it('serves sync metadata without loading city chunks', () => {
+    expect(client.getCountriesShort()).toContain('US')
+    expect(client.getStatesByShort('US')).toContain('California')
+    expect(client.getCountryMetaByShort('US')?.states?.California?.name).toBe('California')
+  })
+
+  it('lazy-loads cities for a single country', async () => {
+    const cities = await client.getCities('US', 'California')
+    expect(cities).toContain('Los Angeles')
+
+    const country = await client.getCountryByShort('US')
+    expect(country?.name).toBe('United States')
+    expect(Array.isArray(country?.states?.California)).toBe(true)
+  })
+
+  it('searches city names within one country', async () => {
+    const hits = await client.getCitiesByName('Los Angeles', 'US')
+    expect(hits.length).toBeGreaterThan(0)
+    expect(hits[0].city.name).toMatch(/Los Angeles/i)
+  })
+
+  it('returns null/empty for unknown country codes', async () => {
+    expect(await client.getCountryByShort('XX')).toBeNull()
+    expect(await client.getCities('XX', 'California')).toBeNull()
+    expect(await client.getCitiesByName('Los Angeles', 'XX')).toEqual([])
   })
 })
 

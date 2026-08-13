@@ -11,6 +11,16 @@
       "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js"
     },
+    "./server": {
+      "types": "./dist/cjs/server.d.ts",
+      "import": "./dist/esm/server.js",
+      "require": "./dist/cjs/server.js"
+    },
+    "./client": {
+      "types": "./dist/cjs/client.d.ts",
+      "import": "./dist/esm/client.js",
+      "require": "./dist/cjs/client.js"
+    },
     "./countries": {
       "types": "./dist/cjs/countries.d.ts",
       "import": "./dist/esm/countries.js",
@@ -24,11 +34,12 @@
     "LICENSE*"
   ],
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
+    "test": "npm run split:client && jest",
+    "test:watch": "npm run split:client && jest --watch",
     "compile": "node scripts/compile-data.js",
+    "split:client": "node scripts/split-client-data.js",
     "copy:data": "node scripts/copy-data.js",
-    "build": "npm run build:cjs && npm run build:esm && npm run copy:data",
+    "build": "npm run split:client && npm run build:cjs && npm run build:esm && npm run copy:data",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "prepublishOnly": "npm run build && npm test"

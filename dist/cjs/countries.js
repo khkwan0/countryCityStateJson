@@ -3,54 +3,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAll = getAll;
-exports.getCountriesShort = getCountriesShort;
-exports.getCountryByShort = getCountryByShort;
-exports.getCountryInfoByShort = getCountryInfoByShort;
-exports.getStatesByShort = getStatesByShort;
-exports.getCountries = getCountries;
+exports.default = exports.getCountries = exports.getStatesByShort = exports.getCountryInfoByShort = exports.getCountryByShort = exports.getCountriesShort = exports.getAll = void 0;
 /**
- * Lighter entry point: country metadata + state names/ids only (no city lists).
- * Import via `countrycitystatejson/countries` when you do not need cities.
+ * Lightweight sync entry: country metadata + state names/ids only (no city lists).
+ * Import via `countrycitystatejson/countries`.
  */
-const compiledCountryAndStates_json_1 = __importDefault(require("./lib/compiledCountryAndStates.json"));
-const typedDb = compiledCountryAndStates_json_1.default;
-function getAll() {
-    return typedDb;
-}
-function getCountriesShort() {
-    return Object.keys(typedDb);
-}
-function getCountryByShort(shortName) {
-    var _a;
-    return (_a = typedDb[shortName]) !== null && _a !== void 0 ? _a : null;
-}
-function getCountryInfoByShort(shortName) {
-    const country = typedDb[shortName];
-    if (!country)
-        return null;
-    const { states: _states, ...info } = country;
-    return { shortName, ...info };
-}
-function getStatesByShort(shortName) {
-    const country = typedDb[shortName];
-    if (!country)
-        return null;
-    if (!country.states)
-        return null;
-    return Object.keys(country.states);
-}
-function getCountries() {
-    return Object.keys(typedDb).map((shortName) => {
-        const { states: _states, ...info } = typedDb[shortName];
-        return { shortName, ...info };
-    });
-}
-exports.default = {
-    getAll,
-    getCountriesShort,
-    getCountryByShort,
-    getCountryInfoByShort,
-    getStatesByShort,
-    getCountries,
-};
+var meta_1 = require("./meta");
+Object.defineProperty(exports, "getAll", { enumerable: true, get: function () { return meta_1.getAll; } });
+Object.defineProperty(exports, "getCountriesShort", { enumerable: true, get: function () { return meta_1.getCountriesShort; } });
+Object.defineProperty(exports, "getCountryByShort", { enumerable: true, get: function () { return meta_1.getCountryByShort; } });
+Object.defineProperty(exports, "getCountryInfoByShort", { enumerable: true, get: function () { return meta_1.getCountryInfoByShort; } });
+Object.defineProperty(exports, "getStatesByShort", { enumerable: true, get: function () { return meta_1.getStatesByShort; } });
+Object.defineProperty(exports, "getCountries", { enumerable: true, get: function () { return meta_1.getCountries; } });
+Object.defineProperty(exports, "default", { enumerable: true, get: function () { return __importDefault(meta_1).default; } });

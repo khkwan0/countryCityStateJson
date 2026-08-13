@@ -1,2 +1,4 @@
 node_modules/
 coverage/
+src/lib/by-country/
+dist/**/lib/by-country/

@@ -3,98 +3,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAll = getAll;
-exports.getCountriesShort = getCountriesShort;
-exports.getCountryByShort = getCountryByShort;
-exports.getCountryInfoByShort = getCountryInfoByShort;
-exports.getStatesByShort = getStatesByShort;
-exports.getCities = getCities;
-exports.getCountries = getCountries;
-exports.getCitiesByName = getCitiesByName;
-const compiledCities_json_1 = __importDefault(require("./lib/compiledCities.json"));
-const trie_search_1 = __importDefault(require("trie-search"));
-const typedDb = compiledCities_json_1.default;
-let cityTrie = null;
-function getCityTrie() {
-    if (cityTrie)
-        return cityTrie;
-    const trie = new trie_search_1.default([], {
-        min: 2,
-        splitOnRegEx: false,
-    });
-    for (const countryName of Object.keys(typedDb)) {
-        const country = typedDb[countryName];
-        const states = country.states || {};
-        for (const state of Object.keys(states)) {
-            const cities = states[state] || [];
-            for (const city of cities) {
-                if (!city || !city.name)
-                    continue;
-                const toSave = {
-                    city,
-                    state,
-                    country,
-                };
-                trie.map(city.name, toSave);
-            }
-        }
-    }
-    cityTrie = trie;
-    return trie;
-}
-function getAll() {
-    return typedDb;
-}
-function getCountriesShort() {
-    return Object.keys(typedDb);
-}
-function getCountryByShort(shortName) {
-    var _a;
-    return (_a = typedDb[shortName]) !== null && _a !== void 0 ? _a : null;
-}
-function getCountryInfoByShort(shortName) {
-    const country = typedDb[shortName];
-    if (!country)
-        return null;
-    const { states: _states, ...info } = country;
-    return { shortName, ...info };
-}
-function getStatesByShort(shortName) {
-    const country = typedDb[shortName];
-    if (!country)
-        return null;
-    if (!country.states)
-        return null;
-    return Object.keys(country.states);
-}
-function getCities(shortName, state) {
-    const country = typedDb[shortName];
-    if (!country)
-        return null;
-    if (!country.states)
-        return null;
-    const cities = country.states[state];
-    if (!cities)
-        return [];
-    return cities.map((city) => city.name).filter(Boolean);
-}
-function getCountries() {
-    return Object.keys(typedDb).map((shortName) => {
-        const { states: _states, ...info } = typedDb[shortName];
-        return { shortName, ...info };
-    });
-}
-function getCitiesByName(name) {
-    return getCityTrie().search(name);
-}
-const api = {
-    getAll,
-    getCountriesShort,
-    getCountryByShort,
-    getCountryInfoByShort,
-    getStatesByShort,
-    getCities,
-    getCountries,
-    getCitiesByName,
-};
-exports.default = api;
+exports.default = exports.getCitiesByName = exports.getCountries = exports.getCities = exports.getStatesByShort = exports.getCountryInfoByShort = exports.getCountryByShort = exports.getCountriesShort = exports.getAll = void 0;
+/**
+ * Default entry — server-optimized (full sync dataset).
+ * For browsers / bundle-sensitive apps, use `countrycitystatejson/client`.
+ */
+var server_1 = require("./server");
+Object.defineProperty(exports, "getAll", { enumerable: true, get: function () { return server_1.getAll; } });
+Object.defineProperty(exports, "getCountriesShort", { enumerable: true, get: function () { return server_1.getCountriesShort; } });
+Object.defineProperty(exports, "getCountryByShort", { enumerable: true, get: function () { return server_1.getCountryByShort; } });
+Object.defineProperty(exports, "getCountryInfoByShort", { enumerable: true, get: function () { return server_1.getCountryInfoByShort; } });
+Object.defineProperty(exports, "getStatesByShort", { enumerable: true, get: function () { return server_1.getStatesByShort; } });
+Object.defineProperty(exports, "getCities", { enumerable: true, get: function () { return server_1.getCities; } });
+Object.defineProperty(exports, "getCountries", { enumerable: true, get: function () { return server_1.getCountries; } });
+Object.defineProperty(exports, "getCitiesByName", { enumerable: true, get: function () { return server_1.getCitiesByName; } });
+Object.defineProperty(exports, "default", { enumerable: true, get: function () { return __importDefault(server_1).default; } });

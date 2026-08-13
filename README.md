@@ -20,13 +20,28 @@ More accurate Nigerian states and cities.  (Thanks TheoOkafor)
 ```
 
 # Usage
-```
-CJS:
-const yourhandle = require('countrycitystatejson')
 
-// Lightweight (countries + states only, no city lists):
+Pick the entry that matches your runtime:
+
+```js
+// Server / Node / SSR — full dataset, sync API (~2.5MB)
+const geo = require('countrycitystatejson')
+// or: require('countrycitystatejson/server')
+
+// Client / bundlers — light metadata sync, cities lazy-loaded per country
+const geoClient = require('countrycitystatejson/client')
+await geoClient.getCities('US', 'California')
+await geoClient.getCitiesByName('Los Angeles', 'US')
+
+// Metadata only — countries + states, no city payloads (~300KB)
 const countriesOnly = require('countrycitystatejson/countries')
 ```
+
+| Entry | Best for | Cities | API |
+|---|---|---|---|
+| `countrycitystatejson` / `.../server` | Node, SSR, backends | In-memory full DB | Sync |
+| `.../client` | Browsers, bundle-sensitive apps | Lazy per-country chunks | Sync metadata + async cities |
+| `.../countries` | Dropdowns / forms without cities | None | Sync |
 
 ESM / TypeScript builds are published under `dist/esm` and `dist/cjs`.
 
@@ -173,7 +188,7 @@ This runs `scripts/compile-data.js`, validates the merged dataset, and writes:
 
 **Important:** some country fixes were applied directly to `compiledCities.json` over time. After changing sources, run `npm run compile` and carefully review the diff (especially `AR`, `IN`, `MX`, `TR`, `ZA`) before committing so curated corrections are not lost.
 
-Then rebuild the library entrypoints:
+Then rebuild the library entrypoints (also regenerates client per-country chunks):
 
 ```bash
 $ npm run build

@@ -54,4 +54,17 @@ export interface CompCities {
   getCitiesByName: (name: string) => CitySearchResult[]
 }
 
+export interface ClientCompCities {
+  getCountriesShort: () => string[]
+  getCountries: () => CountryInfo[]
+  getCountryInfoByShort: (shortName: string) => CountryInfo | null
+  getStatesByShort: (shortName: string) => string[] | null
+  getCountryMetaByShort: (shortName: string) => CountryWithStateMeta | null
+  preloadCountry: (shortName: string) => Promise<Country | null>
+  getCountryByShort: (shortName: string) => Promise<Country | null>
+  getCities: (shortName: string, state: string) => Promise<string[] | null>
+  getCitiesByName: (name: string, shortName: string) => Promise<CitySearchResult[]>
+  clearClientCache: () => void
+}
+
 export default CompCities

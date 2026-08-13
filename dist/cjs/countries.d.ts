@@ -1,17 +1,6 @@
-import type { CountryInfo, CountryStateDatabase, CountryWithStateMeta } from './types';
-export declare function getAll(): CountryStateDatabase;
-export declare function getCountriesShort(): string[];
-export declare function getCountryByShort(shortName: string): CountryWithStateMeta | null;
-export declare function getCountryInfoByShort(shortName: string): CountryInfo | null;
-export declare function getStatesByShort(shortName: string): string[] | null;
-export declare function getCountries(): CountryInfo[];
-declare const _default: {
-    getAll: typeof getAll;
-    getCountriesShort: typeof getCountriesShort;
-    getCountryByShort: typeof getCountryByShort;
-    getCountryInfoByShort: typeof getCountryInfoByShort;
-    getStatesByShort: typeof getStatesByShort;
-    getCountries: typeof getCountries;
-};
-export default _default;
+/**
+ * Lightweight sync entry: country metadata + state names/ids only (no city lists).
+ * Import via `countrycitystatejson/countries`.
+ */
+export { getAll, getCountriesShort, getCountryByShort, getCountryInfoByShort, getStatesByShort, getCountries, default, } from './meta';
 //# sourceMappingURL=countries.d.ts.map
