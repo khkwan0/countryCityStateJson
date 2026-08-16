@@ -139,6 +139,16 @@ npm run smoke:modules       # CJS require + ESM import against package exports
 
 Jenkins and other CI: [docs/CI.md](docs/CI.md).
 
+### Publish
+
+Working tree must be clean. Then:
+
+```bash
+npm run release
+```
+
+That bumps the version to `YY.MM.DDnn` (local date; `nn` is the same-day counter from npm plus the current package version), commits `package.json` and `package-lock.json`, pushes the current branch, and runs `npm publish` (which still runs build / test / smoke). You must already be logged in (`npm login`).
+
 ## Why this package
 
 Existing country and city datasets did not share a usable state/province link. [`country-state-city`](https://www.npmjs.com/package/country-state-city) used integer IDs, which made corrections painful (the US list had seven bogus states). This package merges [annexare/Countries](https://github.com/annexare/Countries) with that city/state data and keys records by name so a recompile does not need reindexing.

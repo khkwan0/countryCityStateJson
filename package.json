@@ -86,7 +86,8 @@
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "fix:modules": "node scripts/fix-dual-package.js",
     "smoke:modules": "node scripts/smoke-modules.js",
-    "prepublishOnly": "npm run build && npm test && npm run smoke:modules"
+    "prepublishOnly": "npm run build && npm test && npm run smoke:modules",
+    "release": "node scripts/release.js"
   },
   "repository": {
     "type": "git",
