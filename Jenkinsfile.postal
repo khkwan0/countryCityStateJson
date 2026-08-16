@@ -1,0 +1,56 @@
+// Jenkinsfile.postal — monthly GeoNames refresh (separate from PR CI).
+// Configure a Pipeline job with cron (e.g. H 6 1 * *) and credentials for git + gh.
+// Does NOT npm publish; opens/updates a GitHub PR when postal data changes.
+
+pipeline {
+  agent any
+
+  options {
+    timestamps()
+    disableConcurrentBuilds()
+    timeout(time: 120, unit: 'MINUTES')
+  }
+
+  triggers {
+    // 1st of each month ~06:00 (Jenkins H timer)
+    cron('H 6 1 * *')
+  }
+
+  tools {
+    nodejs 'node-20'
+  }
+
+  environment {
+    CI = 'true'
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+
+    stage('Install') {
+      steps {
+        sh 'npm ci'
+      }
+    }
+
+    stage('Update postal') {
+      steps {
+        // Requires gh auth (GH_TOKEN or gh auth) and git push rights.
+        sh 'node scripts/update-postal.js'
+      }
+    }
+  }
+
+  post {
+    success {
+      echo 'postal update finished (PR opened only if data changed)'
+    }
+    failure {
+      echo 'postal update failed — see logs'
+    }
+  }
+}

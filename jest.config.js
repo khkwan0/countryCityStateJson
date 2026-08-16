@@ -4,6 +4,11 @@ module.exports = {
   testEnvironment: 'node',
   roots: ['<rootDir>/src', '<rootDir>/scripts'],
   testMatch: ['**/__tests__/**/*.ts', '**/?(*.)+(spec|test).ts', '**/__tests__/**/*.js'],
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    'compile-postal\\.test\\.js',
+    '/packages/',
+  ],
   transform: {
     '^.+\\.ts$': 'ts-jest',
   },

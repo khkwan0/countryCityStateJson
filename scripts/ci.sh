@@ -27,4 +27,15 @@ npm test
 echo "==> smoke: require + import (including package exports)"
 node scripts/smoke-modules.js
 
+if [[ -f packages/postal-us/src/lib/DATA_HASH ]]; then
+  echo "==> build postal packages"
+  npm run build:postal
+  echo "==> test postal"
+  npm run test:postal
+  echo "==> smoke postal"
+  npm run smoke:postal
+else
+  echo "==> skip postal (no compiled DATA_HASH yet; run npm run compile:postal)"
+fi
+
 echo "==> CI passed"

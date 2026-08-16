@@ -14,8 +14,13 @@ That script:
 2. `npm run build` (client chunk split + CJS/ESM emit)
 3. `npm test`
 4. Dual-module smoke: CJS `require` and ESM `import` against package `exports`
+5. If postal data is present (`packages/postal-*/src/lib/DATA_HASH`): build, test, and smoke the postal workspace packages
 
-## Jenkins
+## Monthly postal refresh
+
+Separate Pipeline job using [`Jenkinsfile.postal`](../Jenkinsfile.postal) (cron on the 1st). It runs `node scripts/update-postal.js`, which downloads GeoNames, recompiles bridges, and opens/updates a GitHub PR when data changed. It does **not** `npm publish` (maintainers release with 2FA after merge).
+
+Requires `gh` + git push credentials on the agent.
 
 A declarative `Jenkinsfile` is at the repo root.
 

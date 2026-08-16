@@ -1,0 +1,54 @@
+{
+  "name": "countrycitystatejson-postal-us",
+  "version": "26.08.1601",
+  "description": "US ZIP → city lookup bridged to countrycitystatejson (GeoNames).",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/cjs/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/cjs/index.d.ts",
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      },
+      "default": "./dist/cjs/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node ../../scripts/sync-postal-shared.js us && npm run build:cjs && npm run build:esm && npm run copy:data && npm run fix:modules",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "copy:data": "node ../../scripts/copy-postal-data.js us",
+    "fix:modules": "node ../../scripts/fix-postal-modules.js us",
+    "prepublishOnly": "npm run build",
+    "test": "jest --config ../../jest.postal.config.js --selectProjects postal-us"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/khkwan0/countryCityStateJson.git",
+    "directory": "packages/postal-us"
+  },
+  "keywords": [
+    "postal",
+    "zip",
+    "us",
+    "geonames",
+    "countrycitystatejson"
+  ],
+  "author": "khkwan0@github.com",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}

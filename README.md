@@ -7,6 +7,7 @@ JSON data for the world's countries, states/provinces, and cities.
 ## Recent changes
 
 ```
+2026-08-16 Optional postal packages: countrycitystatejson-postal-us / -world (GeoNames bridge). Monthly Jenkins PR refresh; manual 2FA release.
 2026-08-16 Switched the package license to MIT.
 2026-08-16 Dual CJS/ESM: `import` and `require` both work. `npm run release` date-bumps, commits, pushes, and publishes.
 2026-04-04 Merged fixes to Tucuman province, Argentina.  (Thanks to gerohelguera)
@@ -49,6 +50,23 @@ The package has three entrypoints. The **import path** is which one you load (`i
 | `countrycitystatejson` or `countrycitystatejson/server` | Default/full server build. Same API; loads the whole city database into memory. | Node, SSR, backends | Full in-memory DB (~2.5MB) | Sync |
 | `countrycitystatejson/client` | Browser/bundler build. Country/state metadata is small and sync; cities load one country at a time. | Browsers, bundle-sensitive apps | Lazy per-country chunks | Sync metadata + async cities (`await getCities(…)`) |
 | `countrycitystatejson/countries` | Metadata only: countries + state names, no city lists. | Dropdowns / forms without cities | None (~300KB) | Sync |
+
+### Postal code lookup (separate packages)
+
+ZIP/postal data is **not** in the core package (keeps installs small). Optional companions:
+
+| Package | Scope | Approx. size |
+|---|---|---|
+| [`countrycitystatejson-postal-us`](https://www.npmjs.com/package/countrycitystatejson-postal-us) | United States | ~1–2MB data |
+| [`countrycitystatejson-postal-world`](https://www.npmjs.com/package/countrycitystatejson-postal-world) | All GeoNames postal countries | tens of MB |
+
+```js
+import { getCitiesByPostalCode } from 'countrycitystatejson-postal-us'
+const hits = await getCitiesByPostalCode('90210')
+// [{ city, state, countryCode, postalCode, bridge }, ...] — all combinations
+```
+
+Omit `countryCode` to get every match in that package’s scope; pass a country code to filter. Data from [GeoNames](https://www.geonames.org/) (CC BY). Monthly automation opens a GitHub PR when dumps change; maintainers release with 2FA.
 
 TypeScript types ship with both builds (`dist/cjs`, `dist/esm`).
 
@@ -137,8 +155,10 @@ Convenience functions read from `compiledCities.json`. Please send fixes upstrea
 ### Checks
 
 ```bash
-bash scripts/ci.sh          # install, build, test, import/require smoke
+bash scripts/ci.sh          # install, build, test, import/require smoke (+ postal if data present)
 npm run smoke:modules       # CJS require + ESM import against package exports
+npm run compile:postal     # download GeoNames + bridge into packages/postal-*
+npm run update:postal      # refresh + open/update GitHub PR if data changed
 ```
 
 Jenkins and other CI: [docs/CI.md](docs/CI.md).

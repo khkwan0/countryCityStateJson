@@ -75,19 +75,29 @@
     "README.md",
     "LICENSE*"
   ],
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "test": "npm run split:client && jest",
     "test:watch": "npm run split:client && jest --watch",
+    "test:postal": "jest --config jest.postal.config.js",
     "compile": "node scripts/compile-data.js",
+    "compile:postal": "node scripts/compile-postal.js",
+    "update:postal": "node scripts/update-postal.js",
     "split:client": "node scripts/split-client-data.js",
     "copy:data": "node scripts/copy-data.js",
     "build": "npm run split:client && npm run build:cjs && npm run build:esm && npm run copy:data && npm run fix:modules",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:postal": "npm run build --workspace=countrycitystatejson-postal-us --workspace=countrycitystatejson-postal-world",
     "fix:modules": "node scripts/fix-dual-package.js",
     "smoke:modules": "node scripts/smoke-modules.js",
+    "smoke:postal": "node scripts/smoke-postal.js",
     "prepublishOnly": "npm run build && npm test && npm run smoke:modules",
-    "release": "node scripts/release.js"
+    "release": "node scripts/release.js",
+    "release:postal-us": "node scripts/release-postal.js us",
+    "release:postal-world": "node scripts/release-postal.js world"
   },
   "repository": {
     "type": "git",
