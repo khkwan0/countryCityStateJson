@@ -7,6 +7,7 @@ JSON data for the world's countries, states/provinces, and cities.
 ## Recent changes
 
 ```
+2026-08-16 Switched the package license to MIT.
 2026-08-16 Dual CJS/ESM: `import` and `require` both work. `npm run release` date-bumps, commits, pushes, and publishes.
 2026-04-04 Merged fixes to Tucuman province, Argentina.  (Thanks to gerohelguera)
 2025-08-01 Fixed errnoneous states for India, South Africa, and Mexico.  Added correct cities for Ciudad de Mexico
@@ -153,3 +154,7 @@ That bumps the version to `YY.MM.DDnn` (local date; `nn` is the same-day counter
 ## Why this package
 
 Existing country and city datasets did not share a usable state/province link. [`country-state-city`](https://www.npmjs.com/package/country-state-city) used integer IDs, which made corrections painful (the US list had seven bogus states). This package merges [annexare/Countries](https://github.com/annexare/Countries) with that city/state data and keys records by name so a recompile does not need reindexing.
+
+## License
+
+[MIT](LICENSE)

@@ -100,7 +100,7 @@
     "json"
   ],
   "author": "khkwan0@github.com",
-  "license": "GPL-3.0-or-later",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/khkwan0/countryCityStateJson/issues"
   },
