@@ -5,42 +5,80 @@
  * Splits curated compiledCities.json into per-country chunks for the
  * client-optimized entry (lazy-load one country at a time).
  *
- * Reads:  src/lib/compiledCities.json
- * Writes: src/lib/by-country/{CODE}.json
- *         src/client/countryLoaders.generated.ts
+ * Default:
+ *   Reads:  src/lib/compiledCities.json
+ *   Writes: src/lib/by-country/{CODE}.json
+ *           src/client/countryLoaders.generated.ts
+ *
+ * Subset / custom paths:
+ *   node scripts/split-client-data.js --in=build/subset/core/compiledCities.json \
+ *     --out-dir=build/subset/core/by-country \
+ *     --loaders-out=build/subset/core/countryLoaders.generated.ts
  */
 
 const fs = require('fs')
 const path = require('path')
 
 const ROOT = path.join(__dirname, '..')
-const SOURCE = path.join(ROOT, 'src/lib/compiledCities.json')
-const OUT_DIR = path.join(ROOT, 'src/lib/by-country')
-const LOADERS_OUT = path.join(ROOT, 'src/client/countryLoaders.generated.ts')
+const DEFAULT_SOURCE = path.join(ROOT, 'src/lib/compiledCities.json')
+const DEFAULT_OUT_DIR = path.join(ROOT, 'src/lib/by-country')
+const DEFAULT_LOADERS_OUT = path.join(ROOT, 'src/client/countryLoaders.generated.ts')
 
-function split() {
-  if (!fs.existsSync(SOURCE)) {
-    throw new Error(`Missing ${SOURCE}`)
+function parseSplitArgs(argv) {
+  const opts = {
+    source: DEFAULT_SOURCE,
+    outDir: DEFAULT_OUT_DIR,
+    loadersOut: DEFAULT_LOADERS_OUT,
+    importPrefix: '../lib/by-country',
+  }
+  for (let i = 0; i < argv.length; i++) {
+    const arg = argv[i]
+    if (arg.startsWith('--in=')) opts.source = path.resolve(ROOT, arg.slice(5))
+    else if (arg === '--in') opts.source = path.resolve(ROOT, argv[++i])
+    else if (arg.startsWith('--out-dir='))
+      opts.outDir = path.resolve(ROOT, arg.slice('--out-dir='.length))
+    else if (arg === '--out-dir') opts.outDir = path.resolve(ROOT, argv[++i])
+    else if (arg.startsWith('--loaders-out='))
+      opts.loadersOut = path.resolve(ROOT, arg.slice('--loaders-out='.length))
+    else if (arg === '--loaders-out') opts.loadersOut = path.resolve(ROOT, argv[++i])
+    else if (arg.startsWith('--import-prefix='))
+      opts.importPrefix = arg.slice('--import-prefix='.length)
+  }
+  return opts
+}
+
+/**
+ * @param {{ source?: string, outDir?: string, loadersOut?: string, importPrefix?: string }} [opts]
+ */
+function split(opts = {}) {
+  const source = opts.source || DEFAULT_SOURCE
+  const outDir = opts.outDir || DEFAULT_OUT_DIR
+  const loadersOut = opts.loadersOut || DEFAULT_LOADERS_OUT
+  const importPrefix = opts.importPrefix || '../lib/by-country'
+
+  if (!fs.existsSync(source)) {
+    throw new Error(`Missing ${source}`)
   }
 
-  const db = JSON.parse(fs.readFileSync(SOURCE, 'utf8'))
+  const db = JSON.parse(fs.readFileSync(source, 'utf8'))
   const codes = Object.keys(db).sort()
 
-  fs.mkdirSync(OUT_DIR, { recursive: true })
-  fs.mkdirSync(path.dirname(LOADERS_OUT), { recursive: true })
+  fs.mkdirSync(outDir, { recursive: true })
+  fs.mkdirSync(path.dirname(loadersOut), { recursive: true })
 
-  // Remove stale chunks so deleted countries do not linger.
-  for (const file of fs.readdirSync(OUT_DIR)) {
-    if (file.endsWith('.json')) fs.unlinkSync(path.join(OUT_DIR, file))
+  if (fs.existsSync(outDir)) {
+    for (const file of fs.readdirSync(outDir)) {
+      if (file.endsWith('.json')) fs.unlinkSync(path.join(outDir, file))
+    }
   }
 
   for (const code of codes) {
-    fs.writeFileSync(path.join(OUT_DIR, `${code}.json`), JSON.stringify(db[code]))
+    fs.writeFileSync(path.join(outDir, `${code}.json`), JSON.stringify(db[code]))
   }
 
   const loaderLines = codes.map(
     (code) =>
-      `  ${JSON.stringify(code)}: () => import('../lib/by-country/${code}.json'),`
+      `  ${JSON.stringify(code)}: () => import('${importPrefix}/${code}.json'),`
   )
 
   const loadersSource = `/* eslint-disable */
@@ -56,14 +94,15 @@ ${loaderLines.join('\n')}
 export const countryCodes: string[] = Object.keys(countryLoaders)
 `
 
-  fs.writeFileSync(LOADERS_OUT, loadersSource)
+  fs.writeFileSync(loadersOut, loadersSource)
 
-  return { countries: codes.length, outDir: OUT_DIR, loaders: LOADERS_OUT }
+  return { countries: codes.length, outDir, loaders: loadersOut }
 }
 
 if (require.main === module) {
   try {
-    const result = split()
+    const opts = parseSplitArgs(process.argv.slice(2))
+    const result = split(opts)
     console.log(
       `Split ${result.countries} country chunks into ${path.relative(ROOT, result.outDir)}`
     )
@@ -74,4 +113,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = { split }
+module.exports = { split, parseSplitArgs }

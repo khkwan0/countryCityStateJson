@@ -59,6 +59,14 @@ await getCitiesByPostalCode('00000') // []
 
 Also exported: `preloadCountryPostal('US')`, `clearPostalCache()`, and a default object with the same methods.
 
+## Smaller copy
+
+```bash
+npx ccs-subset --countries=US --out=./geo-us --postal=us
+```
+
+(`ccs-subset` ships with `countrycitystatejson`.)
+
 ## License
 
 MIT (package code). GeoNames postal data: CC BY.

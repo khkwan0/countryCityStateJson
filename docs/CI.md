@@ -52,3 +52,14 @@ Any CI that can run bash + Node works — point it at `scripts/ci.sh`:
 npm install
 bash scripts/ci.sh
 ```
+
+## Country subsets
+
+Default CI always builds the **full** core and postal datasets. Filtered compiles write under `build/subset/` (gitignored) and are for local/custom builds only:
+
+```bash
+npm run compile:subset -- --countries=US,CA
+npm run compile:postal:subset -- --countries=US,CA --skip-download
+```
+
+Consumers of the published packages can filter installed data with `npx ccs-subset` (see root README).

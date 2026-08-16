@@ -108,6 +108,21 @@ Always `await` — lookup is async. The return value is always an **array** (eve
 
 Full docs: [`countrycitystatejson-postal-us`](https://www.npmjs.com/package/countrycitystatejson-postal-us) · [`countrycitystatejson-postal-world`](https://www.npmjs.com/package/countrycitystatejson-postal-world)
 
+### Smaller offline copy (subset by country)
+
+Need only a few countries from an installed package? Use the CLI (ships with this package):
+
+```bash
+npm i countrycitystatejson
+npx ccs-subset --countries=US,CA --out=./geo-us-ca
+
+# Also filter an installed postal package:
+npm i countrycitystatejson-postal-us
+npx ccs-subset --countries=US,CA --out=./geo-us-ca --postal=us
+```
+
+Writes raw JSON under `--out` (`compiledCities.json`, optional `postal/`). This is **not** a republished npm package with client loaders — load the JSON yourself or use the monorepo maintainer compile for a full custom build.
+
 TypeScript types ship with both builds (`dist/cjs`, `dist/esm`).
 
 ### `getAll()`
@@ -184,6 +199,15 @@ Then:
 npm run compile   # writes src/lib/compiledCities.json (+ states-only + compat copy)
 npm run build     # CJS + ESM entrypoints, client chunks, ESM rewrite for Node import
 npm test
+
+# Country allowlist → build/subset/ (does not overwrite src/lib/ by default)
+npm run compile:subset -- --countries=US,CA,MX
+npm run split:client -- --in=build/subset/core/compiledCities.json \
+  --out-dir=build/subset/core/by-country \
+  --loaders-out=build/subset/core/countryLoaders.generated.ts
+
+npm run compile:postal:subset -- --countries=US,CA,DE --skip-download
+# → build/subset/postal/
 ```
 
 `npm run build` includes `fix:modules`, which rewrites `dist/esm` so Node can `import` it (`.js` extensions and JSON import attributes). Do not skip that step, run `tsc` alone, or hand-edit those ESM artifacts. `dist/` is committed — include the rewritten files.
@@ -199,6 +223,8 @@ bash scripts/ci.sh          # install, build, test, import/require smoke (+ post
 npm run smoke:modules       # CJS require + ESM import against package exports
 npm run compile:postal     # download GeoNames + bridge into packages/postal-*
 npm run update:postal      # refresh + open/update GitHub PR if data changed
+npm run compile:subset -- --countries=US,CA
+npm run compile:postal:subset -- --countries=US,CA --skip-download
 ```
 
 Jenkins and other CI: [docs/CI.md](docs/CI.md).

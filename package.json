@@ -71,10 +71,14 @@
   },
   "files": [
     "dist/",
+    "bin/",
     "index.js",
     "README.md",
     "LICENSE*"
   ],
+  "bin": {
+    "ccs-subset": "./bin/ccs-subset.js"
+  },
   "workspaces": [
     "packages/*"
   ],
@@ -83,7 +87,9 @@
     "test:watch": "npm run split:client && jest --watch",
     "test:postal": "jest --config jest.postal.config.js",
     "compile": "node scripts/compile-data.js",
+    "compile:subset": "node scripts/compile-data.js",
     "compile:postal": "node scripts/compile-postal.js",
+    "compile:postal:subset": "node scripts/compile-postal.js",
     "update:postal": "node scripts/update-postal.js",
     "split:client": "node scripts/split-client-data.js",
     "copy:data": "node scripts/copy-data.js",

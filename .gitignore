@@ -3,5 +3,6 @@ coverage/
 src/lib/by-country/
 dist/**/lib/by-country/
 .cache/
+build/subset/
 packages/postal-*/dist/
 packages/postal-*/src/shared/

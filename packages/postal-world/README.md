@@ -65,6 +65,14 @@ await getCitiesByPostalCode('99999') // []
 
 Also exported: `preloadCountryPostal(countryCode)`, `clearPostalCache()`, and a default object with the same methods.
 
+## Smaller copy
+
+```bash
+npx ccs-subset --countries=US,DE,FR --out=./geo-subset --postal=world
+```
+
+(`ccs-subset` ships with `countrycitystatejson`.)
+
 ## Coverage note
 
 Not every GeoNames country is included — only countries/places that successfully bridge to names in `countrycitystatejson` (currently on the order of **~60** country codes). Treat this as a best-effort offline index, not an official postal authority feed.

@@ -5,31 +5,29 @@
  * Compiles countries-list metadata with country-state-city geography
  * into the published JSON datasets under src/lib/.
  *
- * Sources (editable):
- *   - src/countries-list/dist
- *   - src/country-state-city
+ * Full compile (default):
+ *   node scripts/compile-data.js
  *
- * Outputs:
- *   - src/lib/compiledCities.json
- *   - src/lib/compiledCountryAndStates.json
- *   - lib/compiledCities.json (compat copy for root index.js consumers)
- *
- * Note: compiledCities.json may contain curated corrections that are not yet
- * fully represented in the vendored sources. Always review diffs for AR, IN,
- * MX, TR, and ZA (and any other recently fixed regions) before committing a
- * fresh compile.
+ * Country subset (writes build/subset/core/ unless --force-inplace):
+ *   node scripts/compile-data.js --countries=US,CA,MX
+ *   node scripts/compile-data.js --countries-file=codes.txt --out-dir=build/subset/core
  */
 
 const fs = require('fs')
 const path = require('path')
+const { parseCountriesArgv } = require('./lib/countriesArg')
 
 const ROOT = path.join(__dirname, '..')
 const COUNTRIES_LIST = require(path.join(ROOT, 'src/countries-list/dist'))
 const csc = require(path.join(ROOT, 'src/country-state-city'))
 
-const OUT_CITIES = path.join(ROOT, 'src/lib/compiledCities.json')
-const OUT_COUNTRY_STATES = path.join(ROOT, 'src/lib/compiledCountryAndStates.json')
-const OUT_CITIES_COMPAT = path.join(ROOT, 'lib/compiledCities.json')
+const DEFAULT_OUT_CITIES = path.join(ROOT, 'src/lib/compiledCities.json')
+const DEFAULT_OUT_COUNTRY_STATES = path.join(
+  ROOT,
+  'src/lib/compiledCountryAndStates.json'
+)
+const DEFAULT_OUT_CITIES_COMPAT = path.join(ROOT, 'lib/compiledCities.json')
+const SUBSET_CORE = path.join(ROOT, 'build/subset/core')
 
 function buildCountryIdIndex(cscCountries) {
   const bySortName = new Map()
@@ -62,7 +60,13 @@ function withSilencedConsole(fn) {
   }
 }
 
-function compile() {
+/**
+ * @param {{ countries?: string[] | null, forceInplace?: boolean, outDir?: string | null }} [opts]
+ */
+function compile(opts = {}) {
+  const allowlist = opts.countries || null
+  const isSubset = Array.isArray(allowlist) && allowlist.length > 0
+
   const countriesMeta = COUNTRIES_LIST.countries
   if (!countriesMeta || typeof countriesMeta !== 'object') {
     throw new Error('countries-list did not provide a countries object')
@@ -78,10 +82,31 @@ function compile() {
   const compiledCountryAndStates = {}
 
   const missingInCsc = []
+  const missingAllowlist = []
   let stateCount = 0
   let cityCount = 0
 
-  for (const shortName of Object.keys(countriesMeta)) {
+  let shortNames = Object.keys(countriesMeta)
+  if (isSubset) {
+    const metaKeys = new Set(shortNames.map((k) => k.toUpperCase()))
+    shortNames = []
+    for (const code of allowlist) {
+      const match = Object.keys(countriesMeta).find((k) => k.toUpperCase() === code)
+      if (!match) {
+        missingAllowlist.push(code)
+        continue
+      }
+      shortNames.push(match)
+    }
+    if (!shortNames.length) {
+      throw new Error(
+        `No matching countries for allowlist: ${allowlist.join(', ')}`
+      )
+    }
+    void metaKeys
+  }
+
+  for (const shortName of shortNames) {
     const meta = { ...countriesMeta[shortName] }
     const cscCountry = countryIndex.get(shortName.toUpperCase())
 
@@ -114,28 +139,48 @@ function compile() {
     compiledCountryAndStates[shortName] = { ...meta, states: statesOnly }
   }
 
-  validate(compiledCities, { missingInCsc, stateCount, cityCount })
+  validate(compiledCities, { missingInCsc, stateCount, cityCount, subset: isSubset })
 
-  fs.mkdirSync(path.dirname(OUT_CITIES), { recursive: true })
-  fs.mkdirSync(path.dirname(OUT_CITIES_COMPAT), { recursive: true })
+  let outCities
+  let outCountryStates
+  let outCompat
+  const outputs = []
 
-  fs.writeFileSync(OUT_CITIES, JSON.stringify(compiledCities))
-  fs.writeFileSync(OUT_COUNTRY_STATES, JSON.stringify(compiledCountryAndStates))
-  fs.writeFileSync(OUT_CITIES_COMPAT, JSON.stringify(compiledCities))
+  if (isSubset && !opts.forceInplace) {
+    const outDir = path.resolve(ROOT, opts.outDir || SUBSET_CORE)
+    fs.mkdirSync(outDir, { recursive: true })
+    outCities = path.join(outDir, 'compiledCities.json')
+    outCountryStates = path.join(outDir, 'compiledCountryAndStates.json')
+    fs.writeFileSync(outCities, JSON.stringify(compiledCities))
+    fs.writeFileSync(outCountryStates, JSON.stringify(compiledCountryAndStates))
+    outputs.push(outCities, outCountryStates)
+  } else {
+    outCities = DEFAULT_OUT_CITIES
+    outCountryStates = DEFAULT_OUT_COUNTRY_STATES
+    outCompat = DEFAULT_OUT_CITIES_COMPAT
+    fs.mkdirSync(path.dirname(outCities), { recursive: true })
+    fs.mkdirSync(path.dirname(outCompat), { recursive: true })
+    fs.writeFileSync(outCities, JSON.stringify(compiledCities))
+    fs.writeFileSync(outCountryStates, JSON.stringify(compiledCountryAndStates))
+    fs.writeFileSync(outCompat, JSON.stringify(compiledCities))
+    outputs.push(outCities, outCountryStates, outCompat)
+  }
 
   return {
     countries: Object.keys(compiledCities).length,
     states: stateCount,
     cities: cityCount,
     missingInCsc,
-    outputs: [OUT_CITIES, OUT_COUNTRY_STATES, OUT_CITIES_COMPAT],
+    missingAllowlist,
+    subset: isSubset,
+    outputs,
   }
 }
 
 function validate(compiledCities, stats) {
   const codes = Object.keys(compiledCities)
-  if (codes.length < 200) {
-    throw new Error(`Expected at least 200 countries, got ${codes.length}`)
+  if (!codes.length) {
+    throw new Error('Compile produced zero countries')
   }
 
   const requiredCountryFields = [
@@ -151,50 +196,76 @@ function validate(compiledCities, stats) {
     'states',
   ]
 
-  for (const code of ['US', 'CA', 'GB', 'AU', 'IN', 'MX', 'TR', 'AR', 'NG']) {
-    const country = compiledCities[code]
-    if (!country) {
-      throw new Error(`Missing expected country code: ${code}`)
+  if (!stats.subset) {
+    if (codes.length < 200) {
+      throw new Error(`Expected at least 200 countries, got ${codes.length}`)
     }
-    for (const field of requiredCountryFields) {
-      if (typeof country[field] === 'undefined') {
-        throw new Error(`Country ${code} missing field: ${field}`)
+
+    for (const code of ['US', 'CA', 'GB', 'AU', 'IN', 'MX', 'TR', 'AR', 'NG']) {
+      const country = compiledCities[code]
+      if (!country) {
+        throw new Error(`Missing expected country code: ${code}`)
+      }
+      for (const field of requiredCountryFields) {
+        if (typeof country[field] === 'undefined') {
+          throw new Error(`Country ${code} missing field: ${field}`)
+        }
       }
     }
-  }
 
-  const us = compiledCities.US
-  if (!us.states || !us.states.California) {
-    throw new Error('US is missing California after compile')
-  }
-  if (!Array.isArray(us.states.California) || us.states.California.length === 0) {
-    throw new Error('US/California has no cities after compile')
-  }
-
-  const erroneousUsStates = ['Midland', 'Seward', 'Lowa']
-  for (const bad of erroneousUsStates) {
-    if (us.states[bad]) {
-      throw new Error(`US still contains erroneous state: ${bad}`)
+    const us = compiledCities.US
+    if (!us.states || !us.states.California) {
+      throw new Error('US is missing California after compile')
     }
-  }
+    if (!Array.isArray(us.states.California) || us.states.California.length === 0) {
+      throw new Error('US/California has no cities after compile')
+    }
 
-  if (stats.cityCount < 1000) {
-    throw new Error(`Expected at least 1000 cities, got ${stats.cityCount}`)
-  }
+    const erroneousUsStates = ['Midland', 'Seward', 'Lowa']
+    for (const bad of erroneousUsStates) {
+      if (us.states[bad]) {
+        throw new Error(`US still contains erroneous state: ${bad}`)
+      }
+    }
 
-  if (stats.missingInCsc.length > 80) {
-    throw new Error(
-      `Too many countries missing from country-state-city (${stats.missingInCsc.length})`
-    )
+    if (stats.cityCount < 1000) {
+      throw new Error(`Expected at least 1000 cities, got ${stats.cityCount}`)
+    }
+
+    if (stats.missingInCsc.length > 80) {
+      throw new Error(
+        `Too many countries missing from country-state-city (${stats.missingInCsc.length})`
+      )
+    }
+  } else {
+    for (const code of codes) {
+      const country = compiledCities[code]
+      for (const field of requiredCountryFields) {
+        if (typeof country[field] === 'undefined') {
+          throw new Error(`Country ${code} missing field: ${field}`)
+        }
+      }
+    }
   }
 }
 
 if (require.main === module) {
   try {
-    const result = compile()
+    const parsed = parseCountriesArgv(process.argv.slice(2))
+    const result = compile({
+      countries: parsed.codes,
+      forceInplace: parsed.forceInplace,
+      outDir: parsed.outDir,
+    })
     console.log(
-      `Compiled ${result.countries} countries, ${result.states} states, ${result.cities} cities`
+      `Compiled ${result.countries} countries, ${result.states} states, ${result.cities} cities` +
+        (result.subset ? ' (subset)' : '')
     )
+    if (result.missingAllowlist && result.missingAllowlist.length) {
+      console.warn(
+        `Warning: unknown country codes skipped: ${result.missingAllowlist.join(', ')}`
+      )
+    }
     if (result.missingInCsc.length) {
       console.log(
         `Note: ${result.missingInCsc.length} countries have metadata only (no CSC match): ${result.missingInCsc.join(', ')}`

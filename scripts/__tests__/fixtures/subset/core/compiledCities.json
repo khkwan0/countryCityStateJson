@@ -1,0 +1,38 @@
+{
+  "US": {
+    "name": "United States",
+    "native": "United States",
+    "phone": "1",
+    "continent": "NA",
+    "capital": "Washington D.C.",
+    "currency": "USD",
+    "languages": ["en"],
+    "emoji": "🇺🇸",
+    "emojiU": "U+1F1FA U+1F1F8",
+    "states": { "California": [{ "name": "Beverly Hills" }] }
+  },
+  "CA": {
+    "name": "Canada",
+    "native": "Canada",
+    "phone": "1",
+    "continent": "NA",
+    "capital": "Ottawa",
+    "currency": "CAD",
+    "languages": ["en", "fr"],
+    "emoji": "🇨🇦",
+    "emojiU": "U+1F1E8 U+1F1E6",
+    "states": { "Ontario": [{ "name": "Toronto" }] }
+  },
+  "DE": {
+    "name": "Germany",
+    "native": "Deutschland",
+    "phone": "49",
+    "continent": "EU",
+    "capital": "Berlin",
+    "currency": "EUR",
+    "languages": ["de"],
+    "emoji": "🇩🇪",
+    "emojiU": "U+1F1E9 U+1F1EA",
+    "states": {}
+  }
+}
