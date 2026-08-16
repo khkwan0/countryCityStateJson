@@ -8,23 +8,65 @@
   "exports": {
     ".": {
       "types": "./dist/cjs/index.d.ts",
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js"
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      },
+      "default": "./dist/cjs/index.js"
     },
     "./server": {
       "types": "./dist/cjs/server.d.ts",
-      "import": "./dist/esm/server.js",
-      "require": "./dist/cjs/server.js"
+      "import": {
+        "types": "./dist/esm/server.d.ts",
+        "default": "./dist/esm/server.js"
+      },
+      "require": {
+        "types": "./dist/cjs/server.d.ts",
+        "default": "./dist/cjs/server.js"
+      },
+      "default": "./dist/cjs/server.js"
     },
     "./client": {
       "types": "./dist/cjs/client.d.ts",
-      "import": "./dist/esm/client.js",
-      "require": "./dist/cjs/client.js"
+      "import": {
+        "types": "./dist/esm/client.d.ts",
+        "default": "./dist/esm/client.js"
+      },
+      "require": {
+        "types": "./dist/cjs/client.d.ts",
+        "default": "./dist/cjs/client.js"
+      },
+      "default": "./dist/cjs/client.js"
     },
     "./countries": {
       "types": "./dist/cjs/countries.d.ts",
-      "import": "./dist/esm/countries.js",
-      "require": "./dist/cjs/countries.js"
+      "import": {
+        "types": "./dist/esm/countries.d.ts",
+        "default": "./dist/esm/countries.js"
+      },
+      "require": {
+        "types": "./dist/cjs/countries.d.ts",
+        "default": "./dist/cjs/countries.js"
+      },
+      "default": "./dist/cjs/countries.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "server": [
+        "dist/cjs/server.d.ts"
+      ],
+      "client": [
+        "dist/cjs/client.d.ts"
+      ],
+      "countries": [
+        "dist/cjs/countries.d.ts"
+      ]
     }
   },
   "files": [
@@ -39,10 +81,12 @@
     "compile": "node scripts/compile-data.js",
     "split:client": "node scripts/split-client-data.js",
     "copy:data": "node scripts/copy-data.js",
-    "build": "npm run split:client && npm run build:cjs && npm run build:esm && npm run copy:data",
+    "build": "npm run split:client && npm run build:cjs && npm run build:esm && npm run copy:data && npm run fix:modules",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
-    "prepublishOnly": "npm run build && npm test"
+    "fix:modules": "node scripts/fix-dual-package.js",
+    "smoke:modules": "node scripts/smoke-modules.js",
+    "prepublishOnly": "npm run build && npm test && npm run smoke:modules"
   },
   "repository": {
     "type": "git",
@@ -60,6 +104,9 @@
     "url": "https://github.com/khkwan0/countryCityStateJson/issues"
   },
   "homepage": "https://github.com/khkwan0/countryCityStateJson#readme",
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "trie-search": "^2.2.0"
   },

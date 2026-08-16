@@ -1,4 +1,4 @@
-import db from './lib/compiledCountryAndStates.json';
+import db from './lib/compiledCountryAndStates.json' with { type: 'json' };
 const typedDb = db;
 export function getAll() {
     return typedDb;

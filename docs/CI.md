@@ -13,7 +13,7 @@ That script:
 1. `npm ci`
 2. `npm run build` (client chunk split + CJS/ESM emit)
 3. `npm test`
-4. Server/client smoke requires against `dist/`
+4. Dual-module smoke: CJS `require` and ESM `import` against package `exports`
 
 ## Jenkins
 

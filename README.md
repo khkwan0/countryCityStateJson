@@ -1,11 +1,11 @@
 # countrycitystatejson
 
-JSON formatted data containing the world's countries, states/provinces, and cities.
+JSON data for the world's countries, states/provinces, and cities.
 
-#NPM
-https://www.npmjs.com/package/countrycitystatejson
+[npm](https://www.npmjs.com/package/countrycitystatejson)
 
-# Recent Changes
+## Recent changes
+
 ```
 2026-04-04 Merged fixes to Tucuman province, Argentina.  (Thanks to gerohelguera)
 2025-08-01 Fixed errnoneous states for India, South Africa, and Mexico.  Added correct cities for Ciudad de Mexico
@@ -19,202 +19,126 @@ https://www.npmjs.com/package/countrycitystatejson
 More accurate Nigerian states and cities.  (Thanks TheoOkafor)
 ```
 
-# Usage
+## Usage
 
-Pick the entry that matches your runtime:
+ESM `import` and CJS `require` expose the same API (named exports and a default object). Native Node `import` needs **Node 20.10+**; `require` works on Node 18+.
 
 ```js
-// Server / Node / SSR — full dataset, sync API (~2.5MB)
-const geo = require('countrycitystatejson')
-// or: require('countrycitystatejson/server')
+import geo, { getCities } from 'countrycitystatejson'
+// or: import geo from 'countrycitystatejson/server'
+getCities('US', 'California')
 
-// Client / bundlers — light metadata sync, cities lazy-loaded per country
-const geoClient = require('countrycitystatejson/client')
+const geoCjs = require('countrycitystatejson')
+geoCjs.getCities('US', 'California')
+
+// Client / bundlers — metadata is sync; cities lazy-load per country
+import geoClient from 'countrycitystatejson/client'
 await geoClient.getCities('US', 'California')
 await geoClient.getCitiesByName('Los Angeles', 'US')
 
-// Metadata only — countries + states, no city payloads (~300KB)
-const countriesOnly = require('countrycitystatejson/countries')
+// Countries + states only, no city payloads (~300KB)
+import countriesOnly from 'countrycitystatejson/countries'
 ```
 
 | Entry | Best for | Cities | API |
 |---|---|---|---|
-| `countrycitystatejson` / `.../server` | Node, SSR, backends | In-memory full DB | Sync |
+| `countrycitystatejson` / `.../server` | Node, SSR, backends | Full in-memory DB (~2.5MB) | Sync |
 | `.../client` | Browsers, bundle-sensitive apps | Lazy per-country chunks | Sync metadata + async cities |
 | `.../countries` | Dropdowns / forms without cities | None | Sync |
 
-ESM / TypeScript builds are published under `dist/esm` and `dist/cjs`.
+TypeScript types ship with both builds (`dist/cjs`, `dist/esm`).
 
-## yourhandle.getAll()
-Returns entire DB in JSON format.  ~ 2.5MB
+### `getAll()`
 
+Full database (~2.5MB).
 
-## yourhandle.getCountries()
-Returns all countries with their associated information as well as their short name (Country abbreviation)
+### `getCountries()`
 
-```
-[
-...
-	{ shortName: 'HK',
-    name: 'Hong Kong',
-    native: '香港',
-    phone: '852',
-    continent: 'AS',
-    capital: 'City of Victoria',
-    currency: 'HKD',
-    languages: [ 'zh', 'en' ],
-    emoji: '🇭🇰',
-    emojiU: 'U+1F1ED U+1F1F0' },
-  { shortName: 'HM',
-    name: 'Heard Island and McDonald Islands',
-    native: 'Heard Island and McDonald Islands',
-    phone: '61',
-    continent: 'AN',
-    capital: '',
-    currency: 'AUD',
-    languages: [ 'en' ],
-    emoji: '🇭🇲',
-    emojiU: 'U+1F1ED U+1F1F2' },
-  { shortName: 'HN',
-    name: 'Honduras',
-    native: 'Honduras',
-    phone: '504',
-    continent: 'NA',
-    capital: 'Tegucigalpa',
-    currency: 'HNL',
-    languages: [ 'es' ],
-    emoji: '🇭🇳',
-    emojiU: 'U+1F1ED U+1F1F3' },
-	...
-]
-```
-
-## yourhandle.getCountriesShort()
-Returns an array of Countries' short names:
-```
-[ 'AD',
-  'AE',
-  'AF',
-  'AG',
-  'AI',
-  'AL',
-    ...
-]
-```
-
-## yourhandle.getCountryByShort(shortName)
-Returns an object containing country data, as well as an embedded object with the state/province name as the key, where the value is an array of cities.
+Every country plus `shortName` (no states/cities):
 
 ```
-yourhandle.getCountryByShort('US')
-
-{ name: 'United States',
-  native: 'United States',
-  phone: '1',
-  continent: 'NA',
-  capital: 'Washington D.C.',
-  currency: 'USD,USN,USS',
-  languages: [ 'en' ],
-  emoji: '🇺🇸',
-  emojiU: 'U+1F1FA U+1F1F8',
-  states:
-   { Alabama:
-      [ [Object],
-        [Object],
-        [Object],
-				...
-			]
-	 }
-}
+{ shortName: 'HK', name: 'Hong Kong', native: '香港', phone: '852',
+  continent: 'AS', capital: 'City of Victoria', currency: 'HKD',
+  languages: [ 'zh', 'en' ], emoji: '🇭🇰', emojiU: 'U+1F1ED U+1F1F0' }
 ```
 
-## yourhandle.getCountryInfoByShort(shortName)
-Returns the same object as above except without the states property.
-
-## yourhandle.getStatesByShort(shortName)
-For a given country short name, returns an array of the list of states
-
-## yourhandle.getCities(shortName, state)
-Parameters: Country short name and the name of the state matching the result of GetStatesByShort.  See Above.  Returns an array of cities belonging to the given state/province.
+### `getCountriesShort()`
 
 ```
-yourhandle.getCities('US','Kentucky')
+[ 'AD', 'AE', 'AF', 'AG', 'AI', 'AL', ... ]
+```
 
-[ 'Albany',
-  'Ashland',
-  'Bardstown',
-  'Berea',
-  'Bowling Green',
-  'Campbellsville',
-  'Catlettsburg',
-  'Covington',
-  'Crescent Springs',
-  ...
-]
+### `getCountryByShort(shortName)`
+
+Country record with `states` keyed by state name; each value is an array of cities.
 
 ```
-## yourhandle.getCitiesByName(cityName) // this is not cheap
+getCountryByShort('US')
+// { name: 'United States', ..., states: { Alabama: [ [Object], ... ], ... } }
 ```
-yourhandle.getCitiesByName('lexington')
 
-[
-  { id: '44606', name: 'Lexington', state_id: '3938' },
-  { id: '44841', name: 'Lexington Park', state_id: '3942' },
-  { id: '44970', name: 'Lexington', state_id: '3943' },
-  { id: '45561', name: 'Lexington', state_id: '3950' },
-  { id: '48179', name: 'Lexington', state_id: '3957' },
-  { id: '48249', name: 'Lexington', state_id: '3966' },
-  { id: '44607', name: 'Lexington-Fayette', state_id: '3938' }
-]
+### `getCountryInfoByShort(shortName)`
+
+Same as above without `states`.
+
+### `getStatesByShort(shortName)`
+
+State/province names for that country, or `null` if the code is unknown.
+
+### `getCities(shortName, state)`
+
+City names for a country + state (state name from `getStatesByShort`). Unknown country → `null`; unknown state → `[]`.
+
 ```
-# Editing and adding data to origin sources
-Found an error, missing data?  No problem.  The original data set was pulled from other npm packages.  They are indeed not 100% complete and not 100% error free.
+getCities('US', 'Kentucky')
+// [ 'Albany', 'Ashland', 'Bardstown', ... ]
+```
 
-The data sources have been included in the './src' folder.  For example, if you need to edit country information, you will want to edit `./src/countries-list/dist/countries.json`.
+### `getCitiesByName(cityName)`
 
-For cities and states, you will want to edit `./src/country-state-city/lib/city.json` or `state.json`.  Notice that in state.json there is a id element.  That "id" element is indexed in city.json to form a relationship.  So if you want to add a city and connect it the state, find, the state in state.json, get the "id" value and set that as the state id in the city.json file.
+Prefix search across the full dataset (not cheap on the server entry). Client API requires a country code: `getCitiesByName(name, shortName)`.
 
-Editing or updating the sources will require a recompile:
+```
+getCitiesByName('lexington')
+// [ { city: { id, name }, state, country }, ... ]
+```
+
+## Developing
+
+Do not add `"type": "module"` to the **root** `package.json` — that would break Jest, `scripts/*.js`, and root `index.js`. ESM is marked only in `dist/esm/package.json`.
+
+In-repo tests import from `src/` via Jest. That is not the same as a consumer `import` from `'countrycitystatejson'`.
+
+### Data edits
+
+Sources live under `src/`:
+
+- Country metadata: `src/countries-list/dist/countries.json`
+- Cities/states: `src/country-state-city/lib/city.json` and `state.json` (cities join states by `id`)
+
+Then:
 
 ```bash
-$ npm run compile
+npm run compile   # writes src/lib/compiledCities.json (+ states-only + compat copy)
+npm run build     # CJS + ESM entrypoints, client chunks, ESM rewrite for Node import
+npm test
 ```
 
-This runs `scripts/compile-data.js`, validates the merged dataset, and writes:
+`npm run build` includes `fix:modules`, which rewrites `dist/esm` so Node can `import` it (`.js` extensions and JSON import attributes). Do not skip that step, run `tsc` alone, or hand-edit those ESM artifacts. `dist/` is committed — include the rewritten files.
 
-- `src/lib/compiledCities.json` (full countries → states → cities)
-- `src/lib/compiledCountryAndStates.json` (countries → states only)
-- `lib/compiledCities.json` (compat copy)
+Some country fixes were applied directly to `compiledCities.json`. After `compile`, review the diff (especially `AR`, `IN`, `MX`, `TR`, `ZA`) before committing so curated corrections are not lost.
 
-**Important:** some country fixes were applied directly to `compiledCities.json` over time. After changing sources, run `npm run compile` and carefully review the diff (especially `AR`, `IN`, `MX`, `TR`, `ZA`) before committing so curated corrections are not lost.
+Convenience functions read from `compiledCities.json`. Please send fixes upstream so everyone gets them.
 
-Then rebuild the library entrypoints (also regenerates client per-country chunks):
+### Checks
 
 ```bash
-$ npm run build
-$ npm test
+bash scripts/ci.sh          # install, build, test, import/require smoke
+npm run smoke:modules       # CJS require + ESM import against package exports
 ```
 
-compiledCities.json is where the convenience functions (see above) read from.
+Jenkins and other CI: [docs/CI.md](docs/CI.md).
 
-I hope this is clear so that any edits, fixes, and changes can be easily and quickly done by everyone.  Please, if you do have a fix, be sure to submit it, so we can share the fix with everyone.
+## Why this package
 
-# CI
-
-See [docs/CI.md](docs/CI.md) for Jenkins (and other non-GitHub-Actions) setup. Developers can run the same checks locally with:
-
-```bash
-bash scripts/ci.sh
-```
-
-# What? Why?
-
-In my search for a good database in JSON format that contained Countries and their associated states and cities, I found disparate solutions.  
-
-While I found a great database of countries from https://github.com/annexare/Countries and a great database of cities from https://github.com/lutangar/cities.json, I required a linkage between them via states/provinces.  I did indeed found a solution https://www.npmjs.com/package/country-state-city.  However, it did not have rich enough data from the other databases.  In addition, a spot check on that particular database showed errors.  The United States showed 57 states, those 7 extra entries were also incorrect (e.g. it contained state entries for the US named: Midland, Seward, Lowa, etc).  
-
-Why didn't I just fix it and make a pull request you say?  The issue with that particular database was that the entries were linked together with integer ID's.  So in order to lookup a list of states in a country, you need to use the country id.  This indexing scheme extended down the hierarchy; in order to find the cities of a state, the parameter was a a state id, which stemmed from a country id.  While this indexing scheme is high performant, it made edits and updates (due to errors I found) to the data somewhat painful.  Any change in or update would require a reindexing of the whole data set.  
-
-So in order for me to remove the 7 erroneous US states, extra code would need to be written to reindex.  The solution I present you merges the rich data from https://github.com/annexare/Countries, merges it with https://www.npmjs.com/package/country-state-city and replaces the integer indexing scheme with named keys.
-
-This makes recompiling the final JSON object easier.  Any edits to the underyling raw data can recompile the final json without a need for indexing.  I'm making the assumption that there will be more edits and updates required.  I personally only fixed the 7 erroneous states for country code US, and have not confirmed any other state/province and city for accuracy.  In addition, removing the integer id indexing and replacing it with named indeces should not have a performance hit if you are using the V8 engine.
+Existing country and city datasets did not share a usable state/province link. [`country-state-city`](https://www.npmjs.com/package/country-state-city) used integer IDs, which made corrections painful (the US list had seven bogus states). This package merges [annexare/Countries](https://github.com/annexare/Countries) with that city/state data and keys records by name so a recompile does not need reindexing.

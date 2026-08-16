@@ -1,4 +1,4 @@
-import type { Country } from '../types';
+import type { Country } from '../types/index.js';
 export type CountryChunkLoader = () => Promise<{
     default: Country;
 } | Country>;

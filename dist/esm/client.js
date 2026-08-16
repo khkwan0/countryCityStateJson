@@ -7,8 +7,8 @@
  * Import via `countrycitystatejson/client`.
  */
 import TrieSearch from 'trie-search';
-import { countryLoaders } from './client/countryLoaders.generated';
-import { getCountries as getCountriesMeta, getCountriesShort as getCountriesShortMeta, getCountryByShort as getCountryMetaByShort, getCountryInfoByShort as getCountryInfoByShortMeta, getStatesByShort as getStatesByShortMeta, } from './meta';
+import { countryLoaders } from './client/countryLoaders.generated.js';
+import { getCountries as getCountriesMeta, getCountriesShort as getCountriesShortMeta, getCountryByShort as getCountryMetaByShort, getCountryInfoByShort as getCountryInfoByShortMeta, getStatesByShort as getStatesByShortMeta, } from './meta.js';
 const countryCache = new Map();
 const trieCache = new Map();
 function normalizeCode(shortName) {

@@ -1,5 +1,5 @@
-import { getCountries as getCountriesMeta, getCountriesShort as getCountriesShortMeta, getCountryByShort as getCountryMetaByShort, getCountryInfoByShort as getCountryInfoByShortMeta, getStatesByShort as getStatesByShortMeta } from './meta';
-import type { CitySearchResult, Country } from './types';
+import { getCountries as getCountriesMeta, getCountriesShort as getCountriesShortMeta, getCountryByShort as getCountryMetaByShort, getCountryInfoByShort as getCountryInfoByShortMeta, getStatesByShort as getStatesByShortMeta } from './meta.js';
+import type { CitySearchResult, Country } from './types/index.js';
 /** Sync metadata helpers (no city payloads). */
 export declare const getCountriesShort: typeof getCountriesShortMeta;
 export declare const getCountries: typeof getCountriesMeta;

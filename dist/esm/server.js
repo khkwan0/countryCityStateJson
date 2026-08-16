@@ -1,4 +1,4 @@
-import db from './lib/compiledCities.json';
+import db from './lib/compiledCities.json' with { type: 'json' };
 import TrieSearch from 'trie-search';
 /**
  * Server-optimized API: synchronous access to the full in-memory dataset.

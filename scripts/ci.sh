@@ -24,20 +24,7 @@ npm run build
 echo "==> test"
 npm test
 
-echo "==> smoke: server + client entries"
-node -e "
-const server = require('./dist/cjs/server');
-const client = require('./dist/cjs/client');
-if (!server.getCities('US', 'California').includes('Los Angeles')) {
-  throw new Error('server smoke failed');
-}
-client.getCities('US', 'California').then((cities) => {
-  if (!cities.includes('Los Angeles')) throw new Error('client smoke failed');
-  console.log('smoke ok');
-}).catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
-"
+echo "==> smoke: require + import (including package exports)"
+node scripts/smoke-modules.js
 
 echo "==> CI passed"

@@ -1,4 +1,4 @@
-import type { CountryInfo, CountryStateDatabase, CountryWithStateMeta } from './types';
+import type { CountryInfo, CountryStateDatabase, CountryWithStateMeta } from './types/index.js';
 export declare function getAll(): CountryStateDatabase;
 export declare function getCountriesShort(): string[];
 export declare function getCountryByShort(shortName: string): CountryWithStateMeta | null;

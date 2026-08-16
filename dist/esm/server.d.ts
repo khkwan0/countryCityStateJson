@@ -1,4 +1,4 @@
-import type { CitySearchResult, CompCities, Country, CountryInfo, Database } from './types';
+import type { CitySearchResult, CompCities, Country, CountryInfo, Database } from './types/index.js';
 export declare function getAll(): Database;
 export declare function getCountriesShort(): string[];
 export declare function getCountryByShort(shortName: string): Country | null;
