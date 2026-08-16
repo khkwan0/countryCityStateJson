@@ -42,11 +42,13 @@ await geoClient.getCitiesByName('Los Angeles', 'US')
 import countriesOnly from 'countrycitystatejson/countries'
 ```
 
-| Entry | Best for | Cities | API |
-|---|---|---|---|
-| `countrycitystatejson` / `.../server` | Node, SSR, backends | Full in-memory DB (~2.5MB) | Sync |
-| `.../client` | Browsers, bundle-sensitive apps | Lazy per-country chunks | Sync metadata + async cities |
-| `.../countries` | Dropdowns / forms without cities | None | Sync |
+The package has three entrypoints. The **import path** is which one you load (`import … from '…'` or `require('…')`):
+
+| Import path | What it is | Best for | Cities | API |
+|---|---|---|---|---|
+| `countrycitystatejson` or `countrycitystatejson/server` | Default/full server build. Same API; loads the whole city database into memory. | Node, SSR, backends | Full in-memory DB (~2.5MB) | Sync |
+| `countrycitystatejson/client` | Browser/bundler build. Country/state metadata is small and sync; cities load one country at a time. | Browsers, bundle-sensitive apps | Lazy per-country chunks | Sync metadata + async cities (`await getCities(…)`) |
+| `countrycitystatejson/countries` | Metadata only: countries + state names, no city lists. | Dropdowns / forms without cities | None (~300KB) | Sync |
 
 TypeScript types ship with both builds (`dist/cjs`, `dist/esm`).
 
