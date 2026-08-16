@@ -7,7 +7,8 @@ JSON data for the world's countries, states/provinces, and cities.
 ## Recent changes
 
 ```
-2026-08-16 Optional postal packages: `countrycitystatejson-postal-us` (~2.5MB) and `countrycitystatejson-postal-world` (~35MB). ZIP lookup is not in the core package.
+2026-08-16 **Feature: filter to a subset of countries** (requires a recompile / subset step — not automatic on `npm i`). Can drastically reduce footprint. See **Filtering to a subset of countries** below.
+2026-08-16 Optional postal packages: `countrycitystatejson-postal-us` (~2.5MB) and `countrycitystatejson-postal-world` (~35MB). ZIP lookup is not in the core package. Monthly GeoNames PR refresh; manual 2FA release.
 2026-08-16 Switched the package license to MIT.
 2026-08-16 Dual CJS/ESM: `import` and `require` both work. `npm run release` date-bumps, commits, pushes, and publishes.
 2026-04-04 Merged fixes to Tucuman province, Argentina.  (Thanks to gerohelguera)
@@ -108,21 +109,6 @@ Always `await` — lookup is async. The return value is always an **array** (eve
 
 Full docs: [`countrycitystatejson-postal-us`](https://www.npmjs.com/package/countrycitystatejson-postal-us) · [`countrycitystatejson-postal-world`](https://www.npmjs.com/package/countrycitystatejson-postal-world)
 
-### Smaller offline copy (subset by country)
-
-Need only a few countries from an installed package? Use the CLI (ships with this package):
-
-```bash
-npm i countrycitystatejson
-npx ccs-subset --countries=US,CA --out=./geo-us-ca
-
-# Also filter an installed postal package:
-npm i countrycitystatejson-postal-us
-npx ccs-subset --countries=US,CA --out=./geo-us-ca --postal=us
-```
-
-Writes raw JSON under `--out` (`compiledCities.json`, optional `postal/`). This is **not** a republished npm package with client loaders — load the JSON yourself or use the monorepo maintainer compile for a full custom build.
-
 TypeScript types ship with both builds (`dist/cjs`, `dist/esm`).
 
 ### `getAll()`
@@ -180,6 +166,184 @@ getCitiesByName('lexington')
 // [ { city: { id, name }, state, country }, ... ]
 ```
 
+## Filtering to a subset of countries
+
+Published packages ship **full** datasets. Filtering is an explicit **feature**: you must run a subset/recompile step yourself. It is **not** applied automatically when you `npm install`.
+
+Doing so can **drastically reduce** disk and memory footprint (e.g. US-only instead of ~250 countries, or a handful of countries instead of the full ~35MB world postal index).
+
+There are two paths:
+
+| Who | What you run | What you get |
+|---|---|---|
+| **Consumer** (installed from npm) | `npx ccs-subset` | Filtered **JSON files** you load yourself |
+| **Maintainer** (this git repo) | `compile:subset` / `compile:postal:subset` | Recompiled data under `build/subset/` from sources |
+
+Country codes are **ISO 3166-1 alpha-2** (e.g. `US`, `CA`, `DE`). Comma- or space-separated; also `--countries-file=path.txt` (one code per line) on maintainer scripts.
+
+---
+
+### Path A — Consumers (after `npm install`)
+
+Install the full package(s) first, then filter. The CLI ships with `countrycitystatejson` as `ccs-subset`.
+
+#### Core cities only
+
+```bash
+npm i countrycitystatejson
+
+npx ccs-subset --countries=US,CA --out=./geo-us-ca
+```
+
+Writes:
+
+```
+geo-us-ca/
+  compiledCities.json              # only US + CA
+  compiledCountryAndStates.json    # matching meta (if present in the install)
+```
+
+Load it in your app (example):
+
+```js
+const cities = require('./geo-us-ca/compiledCities.json')
+console.log(Object.keys(cities)) // ['CA', 'US']
+console.log(cities.US.states.California)
+```
+
+#### Core + postal
+
+```bash
+npm i countrycitystatejson countrycitystatejson-postal-us
+# or: npm i countrycitystatejson countrycitystatejson-postal-world
+
+npx ccs-subset --countries=US,CA --out=./geo-us-ca --postal=us
+# --postal=world  if you installed the world postal package
+```
+
+Writes the core JSON above, plus:
+
+```
+geo-us-ca/postal/
+  postal-by-country/US.json
+  postal-by-country/CA.json   # only if that code exists in the postal package
+  postal-to-countries.json    # inverted index rebuilt for the subset
+```
+
+**Important (consumer path):**
+
+- Requires a **recompile/subset step** (`ccs-subset`); `npm i` alone always gives the full dataset.
+- Output is **raw JSON**, not a drop-in replacement npm package (no regenerated `/client` loaders, no `getCitiesByPostalCode` wrapper). Wire the files into your own code, or use Path B for a fuller custom build.
+- `--postal=us|world` requires that postal package to be installed; missing country codes are skipped with a warning.
+- Unknown core codes are skipped with a warning; if **no** countries match, the command fails.
+
+```bash
+npx ccs-subset --help
+```
+
+---
+
+### Path B — Maintainers (clone this repository)
+
+Recompile from upstream sources into **`build/subset/`** (gitignored). By default this **does not** overwrite `src/lib/` or `packages/postal-*` (pass `--force-inplace` only if you intend to replace published trees — dangerous).
+
+Prerequisites: `npm install` in the repo root. For postal, either cached GeoNames zips under `.cache/geonames/` or omit `--skip-download` to fetch.
+
+#### Core — recompile a country allowlist
+
+```bash
+# From sources → build/subset/core/compiledCities.json (+ country/states meta)
+npm run compile:subset -- --countries=US,CA,MX
+
+# Same flags work on the underlying script:
+node scripts/compile-data.js --countries=US,CA,MX
+node scripts/compile-data.js --countries-file=./my-countries.txt --out-dir=build/subset/core
+```
+
+Optional: split client chunks for the subset (does not touch committed `src/client/` loaders):
+
+```bash
+npm run split:client -- \
+  --in=build/subset/core/compiledCities.json \
+  --out-dir=build/subset/core/by-country \
+  --loaders-out=build/subset/core/countryLoaders.generated.ts
+```
+
+Outputs:
+
+```
+build/subset/core/
+  compiledCities.json
+  compiledCountryAndStates.json
+  by-country/US.json          # if you ran split:client
+  by-country/CA.json
+  countryLoaders.generated.ts
+```
+
+Full (non-subset) compile remains:
+
+```bash
+npm run compile    # → src/lib/compiledCities.json (all countries)
+npm run build
+```
+
+#### Postal — recompile a country allowlist
+
+```bash
+# From GeoNames + bridge against src/lib/compiledCities.json
+# → build/subset/postal/
+npm run compile:postal:subset -- --countries=US,CA,DE
+
+# Reuse already-downloaded dumps:
+npm run compile:postal:subset -- --countries=US,CA,DE --skip-download
+
+node scripts/compile-postal.js --countries=US --skip-download
+# US-only can use US.zip; multi-country uses allCountries.zip then filters
+```
+
+Outputs:
+
+```
+build/subset/postal/
+  postal-by-country/US.json
+  postal-by-country/CA.json
+  postal-to-countries.json
+  DATA_HASH
+  loaders.generated.js
+```
+
+Full postal packages (published companions) remain:
+
+```bash
+npm run compile:postal -- --scope=us       # → packages/postal-us
+npm run compile:postal -- --scope=world    # → packages/postal-world
+npm run compile:postal                    # both
+```
+
+To overwrite a postal package tree with a filtered set (not recommended for normal releases):
+
+```bash
+node scripts/compile-postal.js --countries=US,CA --force-inplace --scope=world
+```
+
+#### After a maintainer subset compile
+
+1. Point your app or a custom package at `build/subset/core` / `build/subset/postal` JSON.
+2. Or copy artifacts into your own publishable package.
+3. Do **not** commit `build/subset/` (gitignored). Do **not** use `--force-inplace` unless you mean to change the default published datasets.
+
+---
+
+### Size intuition
+
+| Dataset | Typical full size | Subset example |
+|---|---|---|
+| Core cities | ~2.5MB (all countries) | Often much smaller with 1–few countries |
+| Postal US package | ~2.5MB | Already US-scoped; `ccs-subset` can still drop unused codes if you pass a list |
+| Postal world package | ~35MB (~60 bridged countries) | e.g. `US,DE,FR` can be a small fraction of that |
+
+Exact sizes depend on which countries you keep.
+
 ## Developing
 
 Do not add `"type": "module"` to the **root** `package.json` — that would break Jest, `scripts/*.js`, and root `index.js`. ESM is marked only in `dist/esm/package.json`.
@@ -199,16 +363,9 @@ Then:
 npm run compile   # writes src/lib/compiledCities.json (+ states-only + compat copy)
 npm run build     # CJS + ESM entrypoints, client chunks, ESM rewrite for Node import
 npm test
-
-# Country allowlist → build/subset/ (does not overwrite src/lib/ by default)
-npm run compile:subset -- --countries=US,CA,MX
-npm run split:client -- --in=build/subset/core/compiledCities.json \
-  --out-dir=build/subset/core/by-country \
-  --loaders-out=build/subset/core/countryLoaders.generated.ts
-
-npm run compile:postal:subset -- --countries=US,CA,DE --skip-download
-# → build/subset/postal/
 ```
+
+Country allowlists / subset recompiles: see **[Filtering to a subset of countries](#filtering-to-a-subset-of-countries)** (Path B). Do not overwrite `src/lib/` unless you pass `--force-inplace` on purpose.
 
 `npm run build` includes `fix:modules`, which rewrites `dist/esm` so Node can `import` it (`.js` extensions and JSON import attributes). Do not skip that step, run `tsc` alone, or hand-edit those ESM artifacts. `dist/` is committed — include the rewritten files.
 
