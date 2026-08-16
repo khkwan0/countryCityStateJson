@@ -1,4 +1,4 @@
-export type PostalBridge = 'exact' | 'state-only'
+export type PostalBridge = 'exact' | 'state-only' | 'none'
 
 /** Compact on-disk hit: [city, state, bridge] */
 export type PostalHitTuple = [string, string, PostalBridge]

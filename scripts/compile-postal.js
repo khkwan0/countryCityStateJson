@@ -331,9 +331,9 @@ function buildCityLookups(compiledCities) {
   return byCountry
 }
 
-function resolveState(lookup, admin1, adminCode1) {
+function resolveState(lookup, ...adminParts) {
   if (!lookup) return null
-  const candidates = [admin1, adminCode1].filter(Boolean).map(normalizeName)
+  const candidates = adminParts.filter(Boolean).map(normalizeName)
   for (const c of candidates) {
     if (lookup.stateAliases.has(c)) return lookup.stateAliases.get(c)
     if (lookup.states.has(c)) return lookup.states.get(c).name
@@ -341,29 +341,55 @@ function resolveState(lookup, admin1, adminCode1) {
   return null
 }
 
-function bridgeRow(lookup, place, admin1, adminCode1) {
-  if (!lookup) return null
-  const stateName = resolveState(lookup, admin1, adminCode1)
-  if (!stateName) return null
+/**
+ * Bridge a GeoNames postal row onto our city hierarchy.
+ * Always returns a hit when place or admin labels exist (keep unmatched).
+ * @returns {[string, string, 'exact'|'state-only'|'none'] | null}
+ */
+function bridgeRow(lookup, place, admin1, adminCode1, admin2, adminCode2) {
+  const labelState =
+    admin1 || admin2 || adminCode1 || adminCode2 || ''
+  const cityLabel = place || labelState
+  if (!cityLabel && !labelState) return null
+
+  // Country not in core at all → keep GeoNames labels
+  if (!lookup) {
+    return [cityLabel || place || '', labelState, 'none']
+  }
+
+  // Prefer admin1, then admin2 (e.g. FR région vs département)
+  const stateName = resolveState(
+    lookup,
+    admin1,
+    adminCode1,
+    admin2,
+    adminCode2
+  )
+
+  if (!stateName) {
+    return [cityLabel || place || '', labelState, 'none']
+  }
 
   const stateKey = normalizeName(stateName)
   const stateEntry = lookup.states.get(stateKey)
-  if (!stateEntry) return null
+  if (!stateEntry) {
+    return [cityLabel || place || '', labelState, 'none']
+  }
 
   const placeKey = normalizeName(place)
-  const cityName = stateEntry.cities.get(placeKey)
+  const cityName = placeKey ? stateEntry.cities.get(placeKey) : null
   if (cityName) {
     return [cityName, stateName, 'exact']
   }
   if (place) {
     return [place, stateName, 'state-only']
   }
-  return null
+  return [stateName, stateName, 'state-only']
 }
 
 function parsePostalTxt(txtPath, countryFilter, lookups) {
   const byCountry = Object.create(null)
-  const stats = { rows: 0, bridged: 0, skipped: 0 }
+  const stats = { rows: 0, exact: 0, stateOnly: 0, none: 0, skipped: 0 }
 
   const text = fs.readFileSync(txtPath, 'utf8')
   for (const line of text.split('\n')) {
@@ -374,17 +400,28 @@ function parsePostalTxt(txtPath, countryFilter, lookups) {
     const place = parts[2] || ''
     const admin1 = parts[3] || ''
     const adminCode1 = parts[4] || ''
+    const admin2 = parts[5] || ''
+    const adminCode2 = parts[6] || ''
     if (!country || !postal) continue
     if (countryFilter && country !== countryFilter) continue
 
     stats.rows++
     const lookup = lookups[country]
-    const hit = bridgeRow(lookup, place, admin1, adminCode1)
+    const hit = bridgeRow(
+      lookup,
+      place,
+      admin1,
+      adminCode1,
+      admin2,
+      adminCode2
+    )
     if (!hit) {
       stats.skipped++
       continue
     }
-    stats.bridged++
+    if (hit[2] === 'exact') stats.exact++
+    else if (hit[2] === 'state-only') stats.stateOnly++
+    else stats.none++
 
     if (!byCountry[country]) byCountry[country] = Object.create(null)
     if (!byCountry[country][postal]) byCountry[country][postal] = new Map()
@@ -401,6 +438,10 @@ function parsePostalTxt(txtPath, countryFilter, lookups) {
   }
 
   return { indexes, stats }
+}
+
+function formatBridgeStats(stats) {
+  return `rows=${stats.rows} exact=${stats.exact} state-only=${stats.stateOnly} none=${stats.none} skipped=${stats.skipped}`
 }
 
 function buildInverted(indexes) {
@@ -449,16 +490,12 @@ async function compile(opts) {
       const txt = unzipToTxt(zip, 'US.txt')
       const parsed = parsePostalTxt(txt, 'US', lookups)
       indexes = parsed.indexes
-      console.log(
-        `US bridge: rows=${parsed.stats.rows} bridged=${parsed.stats.bridged} skipped=${parsed.stats.skipped}`
-      )
+      console.log(`US bridge: ${formatBridgeStats(parsed.stats)}`)
     } else {
       const zip = await ensureZipAsync('allCountries.zip', opts.skipDownload)
       const txt = unzipToTxt(zip, 'allCountries.txt')
       const parsed = parsePostalTxt(txt, null, lookups)
-      console.log(
-        `World bridge: rows=${parsed.stats.rows} bridged=${parsed.stats.bridged} skipped=${parsed.stats.skipped}`
-      )
+      console.log(`World bridge: ${formatBridgeStats(parsed.stats)}`)
       const filtered = filterIndexes(parsed.indexes, allowlist)
       indexes = filtered.indexes
       if (filtered.missing.length) {
@@ -492,7 +529,7 @@ async function compile(opts) {
       const filtered = filterIndexes(indexes, allowlist)
       indexes = filtered.indexes
     }
-    console.log(`US bridge: rows=${stats.rows} bridged=${stats.bridged} skipped=${stats.skipped}`)
+    console.log(`US bridge: ${formatBridgeStats(stats)}`)
     const pkg = path.join(ROOT, 'packages/postal-us')
     syncSharedInto(pkg)
     const meta = writeScopePackage(pkg, indexes)
@@ -515,7 +552,7 @@ async function compile(opts) {
       }
     }
     console.log(
-      `World bridge: rows=${stats.rows} bridged=${stats.bridged} skipped=${stats.skipped} countries=${Object.keys(indexes).length}`
+      `World bridge: ${formatBridgeStats(stats)} countries=${Object.keys(indexes).length}`
     )
     const pkg = path.join(ROOT, 'packages/postal-world')
     syncSharedInto(pkg)

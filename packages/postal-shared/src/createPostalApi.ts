@@ -33,7 +33,7 @@ function unwrapIndex(mod: unknown): CountryPostalIndex {
 }
 
 function asBridge(value: unknown): PostalBridge | null {
-  if (value === 'exact' || value === 'state-only') return value
+  if (value === 'exact' || value === 'state-only' || value === 'none') return value
   return null
 }
 

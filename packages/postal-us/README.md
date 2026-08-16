@@ -10,7 +10,11 @@ Look up **US ZIP codes** → city / state. Data is bridged onto names from [`cou
 
 Need more countries? Use [`countrycitystatejson-postal-world`](https://www.npmjs.com/package/countrycitystatejson-postal-world) (~**35MB**).
 
-Postal source: [GeoNames](https://www.geonames.org/) ([CC BY](https://creativecommons.org/licenses/by/4.0/) — please credit).
+## Attribution
+
+Postal data is derived from **[GeoNames](https://www.geonames.org/)** ([postal dumps](https://download.geonames.org/export/zip/)), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). If you use this package, please credit GeoNames, for example:
+
+> This product includes postal data from [GeoNames](https://www.geonames.org/) (CC BY 4.0).
 
 ## Install
 
@@ -38,7 +42,7 @@ Example shape:
     state: 'California',
     countryCode: 'US',
     postalCode: '90210',
-    bridge: 'exact', // 'exact' | 'state-only'
+    bridge: 'exact', // 'exact' | 'state-only' | 'none'
   },
 ]
 ```
@@ -55,7 +59,8 @@ await getCitiesByPostalCode('00000') // []
 | `bridge` | Meaning |
 |---|---|
 | `exact` | Place name matched a city in `countrycitystatejson` |
-| `state-only` | State matched; place name is not in that city list |
+| `state-only` | State matched (admin1 or admin2); place name is not in that city list |
+| `none` | No state match — GeoNames place/admin labels kept |
 
 Also exported: `preloadCountryPostal('US')`, `clearPostalCache()`, and a default object with the same methods.
 
@@ -69,4 +74,4 @@ npx ccs-subset --countries=US --out=./geo-us --postal=us
 
 ## License
 
-MIT (package code). GeoNames postal data: CC BY.
+MIT (package code). Underlying postal dumps © [GeoNames](https://www.geonames.org/), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — see [Attribution](#attribution).

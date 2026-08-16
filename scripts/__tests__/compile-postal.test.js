@@ -24,10 +24,18 @@ describe('bridgeRow', () => {
           cities: new Map([['beverly hills', 'Beverly Hills']]),
         },
       ],
+      [
+        'aube',
+        {
+          name: 'Aube',
+          cities: new Map([['troyes', 'Troyes']]),
+        },
+      ],
     ]),
     stateAliases: new Map([
       ['california', 'California'],
       ['ca', 'California'],
+      ['aube', 'Aube'],
     ]),
   }
 
@@ -47,8 +55,22 @@ describe('bridgeRow', () => {
     ])
   })
 
-  test('null when state unknown', () => {
-    expect(bridgeRow(lookup, 'X', 'ZZ', 'ZZ')).toBeNull()
+  test('admin2 fallback when admin1 unmatched', () => {
+    expect(
+      bridgeRow(lookup, 'Troyes', 'Grand Est', '44', 'Aube', '10')
+    ).toEqual(['Troyes', 'Aube', 'exact'])
+  })
+
+  test('bridge none when state unknown', () => {
+    expect(bridgeRow(lookup, 'X', 'ZZ', 'ZZ')).toEqual(['X', 'ZZ', 'none'])
+  })
+
+  test('bridge none when country lookup missing', () => {
+    expect(bridgeRow(null, 'Place', 'Region', 'R')).toEqual([
+      'Place',
+      'Region',
+      'none',
+    ])
   })
 })
 

@@ -27,8 +27,8 @@
   ],
   "scripts": {
     "build": "node ../../scripts/sync-postal-shared.js world && npm run build:cjs && npm run build:esm && npm run copy:data && npm run fix:modules",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "NODE_OPTIONS=--max-old-space-size=8192 tsc -p tsconfig.cjs.json",
+    "build:esm": "NODE_OPTIONS=--max-old-space-size=8192 tsc -p tsconfig.esm.json",
     "copy:data": "node ../../scripts/copy-postal-data.js world",
     "fix:modules": "node ../../scripts/fix-postal-modules.js world",
     "prepublishOnly": "npm run build",

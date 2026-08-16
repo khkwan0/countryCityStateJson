@@ -8,7 +8,7 @@ JSON data for the world's countries, states/provinces, and cities.
 
 ```
 2026-08-16 **Feature: filter to a subset of countries** (requires a recompile / subset step — not automatic on `npm i`). Can drastically reduce footprint. See **Filtering to a subset of countries** below.
-2026-08-16 Optional postal packages: `countrycitystatejson-postal-us` (~2.5MB) and `countrycitystatejson-postal-world` (~35MB). ZIP lookup is not in the core package. Monthly GeoNames PR refresh; manual 2FA release.
+2026-08-16 Optional postal packages: `countrycitystatejson-postal-us` (~2.5MB) and `countrycitystatejson-postal-world` (full GeoNames postal set; size grows with coverage). ZIP lookup is not in the core package. Monthly GeoNames PR refresh; manual 2FA release. Unmatched places kept with `bridge: 'none'`; admin2 used as state fallback.
 2026-08-16 Switched the package license to MIT.
 2026-08-16 Dual CJS/ESM: `import` and `require` both work. `npm run release` date-bumps, commits, pushes, and publishes.
 2026-04-04 Merged fixes to Tucuman province, Argentina.  (Thanks to gerohelguera)
@@ -59,7 +59,7 @@ The package has three entrypoints. The **import path** is which one you load (`i
 | What you need | Install | Unpacked data (approx.) |
 |---|---|---|
 | US ZIP codes only | `npm i countrycitystatejson-postal-us` | **~2.5MB** |
-| Multi-country postal codes | `npm i countrycitystatejson-postal-world` | **~35MB** |
+| Multi-country postal codes | `npm i countrycitystatejson-postal-world` | full GeoNames postal index |
 
 Core `countrycitystatejson` stays ~2.5MB of cities. Do **not** install `-world` if you only need the US.
 
@@ -82,7 +82,7 @@ const hits = await getCitiesByPostalCode('90210')
 //     state: 'California',
 //     countryCode: 'US',
 //     postalCode: '90210',
-//     bridge: 'exact' // or 'state-only'
+//     bridge: 'exact' // or 'state-only' | 'none'
 //   },
 //   ...
 // ]
@@ -103,9 +103,9 @@ await getCitiesByPostalCode('1000', 'BE') // only Belgium rows
 
 Always `await` — lookup is async. The return value is always an **array** (every matching city/place; never a single silent pick). Empty array if unknown.
 
-`bridge: 'exact'` = place matched a city in this dataset; `state-only` = state matched but that place name is not in our city list.
+`bridge: 'exact'` = place matched a city in this dataset; `state-only` = state matched (admin1 or admin2) but that place name is not in our city list; `none` = no state match — GeoNames place/admin labels kept so every postal place is returned.
 
-**Coverage:** indexes are built from [GeoNames](https://www.geonames.org/) postal dumps (CC BY — please credit) and joined to this package’s country/state/city names. The world package currently includes **~60** countries where that join succeeds — not every GeoNames country. Prefer `-us` when you only need the United States.
+**Coverage:** every GeoNames postal place is kept; when the join to this package’s state/city names fails, results still appear with `bridge: 'none'`. Prefer `-us` when you only need the United States. See [Attribution](#attribution) for GeoNames credit.
 
 Full docs: [`countrycitystatejson-postal-us`](https://www.npmjs.com/package/countrycitystatejson-postal-us) · [`countrycitystatejson-postal-world`](https://www.npmjs.com/package/countrycitystatejson-postal-world)
 
@@ -170,7 +170,7 @@ getCitiesByName('lexington')
 
 Published packages ship **full** datasets. Filtering is an explicit **feature**: you must run a subset/recompile step yourself. It is **not** applied automatically when you `npm install`.
 
-Doing so can **drastically reduce** disk and memory footprint (e.g. US-only instead of ~250 countries, or a handful of countries instead of the full ~35MB world postal index).
+Doing so can **drastically reduce** disk and memory footprint (e.g. US-only instead of ~250 countries, or a handful of countries instead of the full world postal index).
 
 There are two paths:
 
@@ -340,7 +340,7 @@ node scripts/compile-postal.js --countries=US,CA --force-inplace --scope=world
 |---|---|---|
 | Core cities | ~2.5MB (all countries) | Often much smaller with 1–few countries |
 | Postal US package | ~2.5MB | Already US-scoped; `ccs-subset` can still drop unused codes if you pass a list |
-| Postal world package | ~35MB (~60 bridged countries) | e.g. `US,DE,FR` can be a small fraction of that |
+| Postal world package | full GeoNames postal set | e.g. `US,DE,FR` can be a small fraction of that |
 
 Exact sizes depend on which countries you keep.
 
@@ -404,6 +404,18 @@ Postal data refresh (maintainers): `npm run compile:postal` / `npm run update:po
 
 Existing country and city datasets did not share a usable state/province link. [`country-state-city`](https://www.npmjs.com/package/country-state-city) used integer IDs, which made corrections painful (the US list had seven bogus states). This package merges [annexare/Countries](https://github.com/annexare/Countries) with that city/state data and keys records by name so a recompile does not need reindexing.
 
+## Attribution
+
+Postal code data in the optional companion packages (`countrycitystatejson-postal-us`, `countrycitystatejson-postal-world`) is derived from **[GeoNames](https://www.geonames.org/)** postal dumps ([download](https://download.geonames.org/export/zip/)).
+
+GeoNames data is licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/). If you use those packages (or redistribute their data), you must credit GeoNames — for example:
+
+> This product includes postal data from [GeoNames](https://www.geonames.org/) (CC BY 4.0).
+
+The core `countrycitystatejson` country/state/city hierarchy is separate from GeoNames; see [Why this package](#why-this-package).
+
 ## License
 
-[MIT](LICENSE)
+[MIT](LICENSE) — package code and the core country/state/city dataset.
+
+Postal companion packages: MIT for package code; underlying postal dumps © [GeoNames](https://www.geonames.org/), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).

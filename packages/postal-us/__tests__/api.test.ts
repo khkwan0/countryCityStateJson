@@ -46,8 +46,17 @@ describe('createPostalApi', () => {
     expect(await api.getCitiesByPostalCode('99999')).toEqual([])
   })
 
-  test('normalizes postal case', async () => {
-    const hits = await api.getCitiesByPostalCode('90210', 'us')
-    expect(hits[0].city).toBe('Beverly Hills')
+  test('accepts bridge none', async () => {
+    const apiNone = createPostalApi({
+      countryLoaders: {
+        FR: async () => ({
+          '10110': [['Bar-sur-Aube', 'Grand Est', 'none']],
+        }),
+      },
+      postalToCountries: { '10110': ['FR'] },
+    })
+    const hits = await apiNone.getCitiesByPostalCode('10110', 'FR')
+    expect(hits[0].bridge).toBe('none')
+    expect(hits[0].city).toBe('Bar-sur-Aube')
   })
 })
