@@ -2,14 +2,47 @@
   "name": "countrycitystatejson",
   "version": "26.04.0501",
   "description": "A JSON Object containing Countries and their associated States/Provinces and cities.",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/cjs/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/cjs/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./server": {
+      "types": "./dist/cjs/server.d.ts",
+      "import": "./dist/esm/server.js",
+      "require": "./dist/cjs/server.js"
+    },
+    "./client": {
+      "types": "./dist/cjs/client.d.ts",
+      "import": "./dist/esm/client.js",
+      "require": "./dist/cjs/client.js"
+    },
+    "./countries": {
+      "types": "./dist/cjs/countries.d.ts",
+      "import": "./dist/esm/countries.js",
+      "require": "./dist/cjs/countries.js"
+    }
+  },
+  "files": [
+    "dist/",
+    "index.js",
+    "README.md",
+    "LICENSE*"
+  ],
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "build": "tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json",
+    "test": "npm run split:client && jest",
+    "test:watch": "npm run split:client && jest --watch",
+    "compile": "node scripts/compile-data.js",
+    "split:client": "node scripts/split-client-data.js",
+    "copy:data": "node scripts/copy-data.js",
+    "build": "npm run split:client && npm run build:cjs && npm run build:esm && npm run copy:data",
     "build:esm": "tsc -p tsconfig.esm.json",
-    "build:cjs": "tsc -p tsconfig.cjs.json"
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "prepublishOnly": "npm run build && npm test"
   },
   "repository": {
     "type": "git",
@@ -28,8 +61,6 @@
   },
   "homepage": "https://github.com/khkwan0/countryCityStateJson#readme",
   "dependencies": {
-    "countries-list": "^2.3.2",
-    "country-state-city": "0.0.5",
     "trie-search": "^2.2.0"
   },
   "reveal": true,
