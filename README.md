@@ -7,7 +7,7 @@ JSON data for the world's countries, states/provinces, and cities.
 ## Recent changes
 
 ```
-2026-08-16 Optional postal packages: countrycitystatejson-postal-us / -world (GeoNames bridge). Monthly Jenkins PR refresh; manual 2FA release.
+2026-08-16 Optional postal packages: `countrycitystatejson-postal-us` (~2.5MB) and `countrycitystatejson-postal-world` (~35MB). ZIP lookup is not in the core package.
 2026-08-16 Switched the package license to MIT.
 2026-08-16 Dual CJS/ESM: `import` and `require` both work. `npm run release` date-bumps, commits, pushes, and publishes.
 2026-04-04 Merged fixes to Tucuman province, Argentina.  (Thanks to gerohelguera)
@@ -51,22 +51,62 @@ The package has three entrypoints. The **import path** is which one you load (`i
 | `countrycitystatejson/client` | Browser/bundler build. Country/state metadata is small and sync; cities load one country at a time. | Browsers, bundle-sensitive apps | Lazy per-country chunks | Sync metadata + async cities (`await getCities(…)`) |
 | `countrycitystatejson/countries` | Metadata only: countries + state names, no city lists. | Dropdowns / forms without cities | None (~300KB) | Sync |
 
-### Postal code lookup (separate packages)
+### Looking up a city by ZIP / postal code?
 
-ZIP/postal data is **not** in the core package (keeps installs small). Optional companions:
+**Not in this package.** Install one of the optional companions (pick **one**):
 
-| Package | Scope | Approx. size |
+| What you need | Install | Unpacked data (approx.) |
 |---|---|---|
-| [`countrycitystatejson-postal-us`](https://www.npmjs.com/package/countrycitystatejson-postal-us) | United States | ~1–2MB data |
-| [`countrycitystatejson-postal-world`](https://www.npmjs.com/package/countrycitystatejson-postal-world) | All GeoNames postal countries | tens of MB |
+| US ZIP codes only | `npm i countrycitystatejson-postal-us` | **~2.5MB** |
+| Multi-country postal codes | `npm i countrycitystatejson-postal-world` | **~35MB** |
 
-```js
-import { getCitiesByPostalCode } from 'countrycitystatejson-postal-us'
-const hits = await getCitiesByPostalCode('90210')
-// [{ city, state, countryCode, postalCode, bridge }, ...] — all combinations
+Core `countrycitystatejson` stays ~2.5MB of cities. Do **not** install `-world` if you only need the US.
+
+```bash
+# US only (smaller)
+npm i countrycitystatejson-postal-us
+
+# Or worldwide bridged set (much larger)
+npm i countrycitystatejson-postal-world
 ```
 
-Omit `countryCode` to get every match in that package’s scope; pass a country code to filter. Data from [GeoNames](https://www.geonames.org/) (CC BY). Monthly automation opens a GitHub PR when dumps change; maintainers release with 2FA.
+```js
+// US package
+import { getCitiesByPostalCode } from 'countrycitystatejson-postal-us'
+
+const hits = await getCitiesByPostalCode('90210')
+// [
+//   {
+//     city: 'Beverly Hills',
+//     state: 'California',
+//     countryCode: 'US',
+//     postalCode: '90210',
+//     bridge: 'exact' // or 'state-only'
+//   },
+//   ...
+// ]
+
+// Optional: filter to one country (still returns an array)
+await getCitiesByPostalCode('90210', 'US')
+```
+
+```js
+// World package — same API; omit country to get every country that shares that postal string
+import { getCitiesByPostalCode } from 'countrycitystatejson-postal-world'
+
+const hits = await getCitiesByPostalCode('1000')
+// may include US, BE, AT, … — each row has countryCode
+
+await getCitiesByPostalCode('1000', 'BE') // only Belgium rows
+```
+
+Always `await` — lookup is async. The return value is always an **array** (every matching city/place; never a single silent pick). Empty array if unknown.
+
+`bridge: 'exact'` = place matched a city in this dataset; `state-only` = state matched but that place name is not in our city list.
+
+**Coverage:** indexes are built from [GeoNames](https://www.geonames.org/) postal dumps (CC BY — please credit) and joined to this package’s country/state/city names. The world package currently includes **~60** countries where that join succeeds — not every GeoNames country. Prefer `-us` when you only need the United States.
+
+Full docs: [`countrycitystatejson-postal-us`](https://www.npmjs.com/package/countrycitystatejson-postal-us) · [`countrycitystatejson-postal-world`](https://www.npmjs.com/package/countrycitystatejson-postal-world)
 
 TypeScript types ship with both builds (`dist/cjs`, `dist/esm`).
 
@@ -168,10 +208,14 @@ Jenkins and other CI: [docs/CI.md](docs/CI.md).
 Working tree must be clean. Then:
 
 ```bash
-npm run release
+npm run release                 # core countrycitystatejson only
+npm run release:postal-us        # optional US postal package
+npm run release:postal-world     # optional world postal package
 ```
 
-That bumps the version to `YY.MM.DDnn` (local date; `nn` is the same-day counter from npm plus the current package version), commits `package.json` and `package-lock.json`, pushes the current branch, and runs `npm publish` (which still runs build / test / smoke). You must already be logged in (`npm login`).
+Core release bumps to `YY.MM.DDnn` (local date; `nn` is the same-day counter from npm plus the current package version), commits `package.json` and `package-lock.json`, pushes the current branch, and runs `npm publish` (which still runs build / test / smoke). You must already be logged in (`npm login`). Postal packages use the same date scheme on their own `package.json` versions.
+
+Postal data refresh (maintainers): `npm run compile:postal` / `npm run update:postal` opens a GitHub PR when GeoNames indexes change; release postal packages manually after merge (2FA). See [docs/CI.md](docs/CI.md) and [`Jenkinsfile.postal`](Jenkinsfile.postal).
 
 ## Why this package
 

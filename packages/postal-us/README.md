@@ -1,8 +1,16 @@
 # countrycitystatejson-postal-us
 
-US ZIP code → city/state lookup, bridged onto [countrycitystatejson](https://www.npmjs.com/package/countrycitystatejson) names.
+Look up **US ZIP codes** → city / state. Data is bridged onto names from [`countrycitystatejson`](https://www.npmjs.com/package/countrycitystatejson).
 
-Postal source: [GeoNames](https://www.geonames.org/) postal codes ([CC BY](https://creativecommons.org/licenses/by/4.0/)). Please credit GeoNames.
+| | |
+|---|---|
+| **Install size (data)** | **~2.5MB** unpacked |
+| **Scope** | United States only |
+| **When to use** | You only need US ZIPs — prefer this over the world package |
+
+Need more countries? Use [`countrycitystatejson-postal-world`](https://www.npmjs.com/package/countrycitystatejson-postal-world) (~**35MB**).
+
+Postal source: [GeoNames](https://www.geonames.org/) ([CC BY](https://creativecommons.org/licenses/by/4.0/) — please credit).
 
 ## Install
 
@@ -10,25 +18,47 @@ Postal source: [GeoNames](https://www.geonames.org/) postal codes ([CC BY](https
 npm i countrycitystatejson-postal-us
 ```
 
-## Usage
+You do **not** need to install `countrycitystatejson` for postal lookup to work (results are plain `{ city, state, countryCode, … }` strings). Install the core package only if you also want the country → state → city hierarchy.
+
+## Use
 
 ```js
-import postal, { getCitiesByPostalCode } from 'countrycitystatejson-postal-us'
+import { getCitiesByPostalCode } from 'countrycitystatejson-postal-us'
+// or: const { getCitiesByPostalCode } = require('countrycitystatejson-postal-us')
 
-// All matches for this ZIP in the US package scope
 const hits = await getCitiesByPostalCode('90210')
-// [{ city, state, countryCode: 'US', postalCode: '90210', bridge: 'exact'|'state-only' }, ...]
-
-// Optional country filter (still returns an array)
-await getCitiesByPostalCode('90210', 'US')
 ```
 
-`bridge: 'exact'` means the place matched a city already in `countrycitystatejson`. `state-only` means the state matched but the place name is not in that city list.
+Example shape:
 
-## Updates
+```js
+[
+  {
+    city: 'Beverly Hills',
+    state: 'California',
+    countryCode: 'US',
+    postalCode: '90210',
+    bridge: 'exact', // 'exact' | 'state-only'
+  },
+]
+```
 
-A monthly Jenkins job recompiles from GeoNames and opens a GitHub PR when data changes. After merge, maintainers release manually with 2FA (`npm run release:postal-us` from the monorepo).
+```js
+// Optional country filter (still an array)
+await getCitiesByPostalCode('90210', 'US')
+
+await getCitiesByPostalCode('00000') // []
+```
+
+**Always `await`.** Return value is always an **array** of every match (never a single auto-picked city).
+
+| `bridge` | Meaning |
+|---|---|
+| `exact` | Place name matched a city in `countrycitystatejson` |
+| `state-only` | State matched; place name is not in that city list |
+
+Also exported: `preloadCountryPostal('US')`, `clearPostalCache()`, and a default object with the same methods.
 
 ## License
 
-MIT (package code). GeoNames data: CC BY.
+MIT (package code). GeoNames postal data: CC BY.
