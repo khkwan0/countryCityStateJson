@@ -14,6 +14,7 @@
  */
 
 const { execSync } = require('child_process')
+const fs = require('fs')
 const path = require('path')
 
 const ROOT = path.join(__dirname, '..')
@@ -35,12 +36,33 @@ function datePrefix(date = new Date()) {
   return `${yy}.${mm}.${dd}`
 }
 
+/** Parse YY.MM.DDnn, including npm-stripped forms like 26.8.1601 or 26.4.501. */
+function parseDateVersion(version) {
+  const m = String(version).match(/^(\d+)\.(\d+)\.(\d+)$/)
+  if (!m) return null
+  const patch = m[3]
+  if (patch.length < 3) return null
+  const nn = patch.slice(-2)
+  const dd = patch.slice(0, -2).padStart(2, '0')
+  const yy = m[1].padStart(2, '0').slice(-2)
+  const mm = m[2].padStart(2, '0')
+  return {
+    yy,
+    mm,
+    dd,
+    nn,
+    prefix: `${yy}.${mm}.${dd}`,
+    canonical: `${yy}.${mm}.${dd}${nn}`,
+  }
+}
+
 function nextDateVersion(prefix, versions) {
   let n = 1
-  const re = new RegExp(`^${prefix.replace(/\./g, '\\.')}(\\d{2})$`)
   for (const v of versions) {
-    const m = String(v).match(re)
-    if (m) n = Math.max(n, Number(m[1]) + 1)
+    const parsed = parseDateVersion(v)
+    if (parsed && parsed.prefix === prefix) {
+      n = Math.max(n, Number(parsed.nn) + 1)
+    }
   }
   if (n > 99) {
     throw new Error(`Too many publishes for ${prefix} (max 99)`)
@@ -50,13 +72,24 @@ function nextDateVersion(prefix, versions) {
 
 function chooseVersion(prefix, published, currentVersion) {
   const fromRegistry = nextDateVersion(prefix, published)
-  if (!currentVersion || !String(currentVersion).startsWith(prefix)) {
-    return fromRegistry
-  }
-  const curN = Number(String(currentVersion).slice(prefix.length))
-  const nextN = Number(fromRegistry.slice(prefix.length))
-  if (!Number.isFinite(curN)) return fromRegistry
-  return curN >= nextN ? currentVersion : fromRegistry
+  const current = parseDateVersion(currentVersion)
+  if (!current || current.prefix !== prefix) return fromRegistry
+  const nextN = Number(fromRegistry.slice(-2))
+  const curN = Number(current.nn)
+  return curN >= nextN ? current.canonical : fromRegistry
+}
+
+function setRootVersion(next) {
+  const pkgPath = path.join(ROOT, 'package.json')
+  const pkgJson = JSON.parse(fs.readFileSync(pkgPath, 'utf8'))
+  pkgJson.version = next
+  fs.writeFileSync(pkgPath, `${JSON.stringify(pkgJson, null, 2)}\n`)
+
+  const lockPath = path.join(ROOT, 'package-lock.json')
+  const lock = JSON.parse(fs.readFileSync(lockPath, 'utf8'))
+  lock.version = next
+  if (lock.packages && lock.packages['']) lock.packages[''].version = next
+  fs.writeFileSync(lockPath, `${JSON.stringify(lock, null, 2)}\n`)
 }
 
 function publishedVersions(name) {
@@ -98,14 +131,15 @@ function release() {
 
   const prefix = datePrefix()
   const next = chooseVersion(prefix, publishedVersions(pkg.name), pkg.version)
+  const currentCanon = parseDateVersion(pkg.version)?.canonical
   console.log(`Releasing ${pkg.name}@${next} from ${branch}`)
 
-  if (pkg.version !== next) {
-    run(`npm version ${next} --no-git-tag-version`, { stdio: 'inherit' })
+  if (currentCanon !== next) {
+    setRootVersion(next)
     run('git add package.json package-lock.json')
     run(`git commit -m "release: ${next}"`, { stdio: 'inherit' })
   } else {
-    console.log(`package.json already at ${next}; skipping version commit`)
+    console.log(`package.json already at ${pkg.version} (same as ${next}); skipping version commit`)
   }
 
   run('git push', { stdio: 'inherit' })
@@ -117,7 +151,8 @@ if (require.main === module) {
   try {
     release()
   } catch (err) {
-    console.error(err.message || err)
+    const detail = err.stderr || err.stdout || err.message || err
+    console.error(String(detail).trim() || err)
     process.exit(1)
   }
 }
@@ -126,6 +161,7 @@ module.exports = {
   chooseVersion,
   datePrefix,
   nextDateVersion,
+  parseDateVersion,
   publishedVersions,
   release,
 }

@@ -1,4 +1,4 @@
-const { chooseVersion, datePrefix, nextDateVersion } = require('../release')
+const { chooseVersion, datePrefix, nextDateVersion, parseDateVersion } = require('../release')
 
 describe('release versioning', () => {
   it('formats YY.MM.DD from a local date', () => {
@@ -31,5 +31,12 @@ describe('release versioning', () => {
 
   it('rejects more than 99 publishes in one day', () => {
     expect(() => nextDateVersion('26.08.16', ['26.08.1699'])).toThrow(/Too many publishes/)
+  })
+
+  it('treats npm-stripped zeros as the same date version', () => {
+    expect(parseDateVersion('26.8.1601').canonical).toBe('26.08.1601')
+    expect(parseDateVersion('26.4.501').canonical).toBe('26.04.0501')
+    expect(chooseVersion('26.08.16', [], '26.8.1601')).toBe('26.08.1601')
+    expect(nextDateVersion('26.08.16', ['26.8.1601'])).toBe('26.08.1602')
   })
 })
