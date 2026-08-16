@@ -7,6 +7,7 @@ JSON data for the world's countries, states/provinces, and cities.
 ## Recent changes
 
 ```
+2026-08-16 Dual CJS/ESM: `import` and `require` both work. `npm run release` date-bumps, commits, pushes, and publishes.
 2026-04-04 Merged fixes to Tucuman province, Argentina.  (Thanks to gerohelguera)
 2025-08-01 Fixed errnoneous states for India, South Africa, and Mexico.  Added correct cities for Ciudad de Mexico
 2025-05-29 Added typescript definitions
