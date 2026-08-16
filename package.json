@@ -1,6 +1,6 @@
 {
   "name": "countrycitystatejson",
-  "version": "26.04.0501",
+  "version": "26.8.1601",
   "description": "A JSON Object containing Countries and their associated States/Provinces and cities.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
