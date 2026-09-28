@@ -1232,7 +1232,7 @@
 	"country_id": "17"
 }, {
 	"id": "337",
-	"name": "Bagar Hat",
+	"name": "Bagerhat",
 	"country_id": "18"
 }, {
 	"id": "338",
@@ -1244,7 +1244,7 @@
 	"country_id": "18"
 }, {
 	"id": "340",
-	"name": "Barisal",
+	"name": "Barishal",
 	"country_id": "18"
 }, {
 	"id": "341",
@@ -1252,11 +1252,11 @@
 	"country_id": "18"
 }, {
 	"id": "342",
-	"name": "Bogora",
+	"name": "Bogura",
 	"country_id": "18"
 }, {
 	"id": "343",
-	"name": "Brahman Bariya",
+	"name": "Brahmanbaria",
 	"country_id": "18"
 }, {
 	"id": "344",
@@ -1264,11 +1264,7 @@
 	"country_id": "18"
 }, {
 	"id": "345",
-	"name": "Chattagam",
-	"country_id": "18"
-}, {
-	"id": "346",
-	"name": "Chittagong Division",
+	"name": "Chattogram",
 	"country_id": "18"
 }, {
 	"id": "347",
@@ -1292,7 +1288,7 @@
 	"country_id": "18"
 }, {
 	"id": "352",
-	"name": "Gaybanda",
+	"name": "Gaibandha",
 	"country_id": "18"
 }, {
 	"id": "353",
@@ -1308,7 +1304,7 @@
 	"country_id": "18"
 }, {
 	"id": "356",
-	"name": "Jaipur Hat",
+	"name": "Joypurhat",
 	"country_id": "18"
 }, {
 	"id": "357",
@@ -1316,15 +1312,15 @@
 	"country_id": "18"
 }, {
 	"id": "358",
-	"name": "Jessor",
+	"name": "Jashore",
 	"country_id": "18"
 }, {
 	"id": "359",
-	"name": "Jhalakati",
+	"name": "Jhalokati",
 	"country_id": "18"
 }, {
 	"id": "360",
-	"name": "Jhanaydah",
+	"name": "Jhenaidah",
 	"country_id": "18"
 }, {
 	"id": "361",
@@ -1336,15 +1332,15 @@
 	"country_id": "18"
 }, {
 	"id": "363",
-	"name": "Kishorganj",
+	"name": "Kishoreganj",
 	"country_id": "18"
 }, {
 	"id": "364",
-	"name": "Koks Bazar",
+	"name": "Cox's Bazar",
 	"country_id": "18"
 }, {
 	"id": "365",
-	"name": "Komilla",
+	"name": "Cumilla",
 	"country_id": "18"
 }, {
 	"id": "366",
@@ -1352,7 +1348,7 @@
 	"country_id": "18"
 }, {
 	"id": "367",
-	"name": "Kushtiya",
+	"name": "Kushtia",
 	"country_id": "18"
 }, {
 	"id": "368",
@@ -1360,7 +1356,7 @@
 	"country_id": "18"
 }, {
 	"id": "369",
-	"name": "Lalmanir Hat",
+	"name": "Lalmonirhat",
 	"country_id": "18"
 }, {
 	"id": "370",
@@ -1372,7 +1368,7 @@
 	"country_id": "18"
 }, {
 	"id": "372",
-	"name": "Maimansingh",
+	"name": "Mymensingh",
 	"country_id": "18"
 }, {
 	"id": "373",
@@ -1380,7 +1376,7 @@
 	"country_id": "18"
 }, {
 	"id": "374",
-	"name": "Maulvi Bazar",
+	"name": "Moulvibazar",
 	"country_id": "18"
 }, {
 	"id": "375",
@@ -1392,7 +1388,7 @@
 	"country_id": "18"
 }, {
 	"id": "377",
-	"name": "Naral",
+	"name": "Narail",
 	"country_id": "18"
 }, {
 	"id": "378",
@@ -1404,19 +1400,19 @@
 	"country_id": "18"
 }, {
 	"id": "380",
-	"name": "Nator",
+	"name": "Natore",
 	"country_id": "18"
 }, {
 	"id": "381",
-	"name": "Naugaon",
+	"name": "Naogaon",
 	"country_id": "18"
 }, {
 	"id": "382",
-	"name": "Nawabganj",
+	"name": "Chapainawabganj",
 	"country_id": "18"
 }, {
 	"id": "383",
-	"name": "Netrakona",
+	"name": "Netrokona",
 	"country_id": "18"
 }, {
 	"id": "384",
@@ -1472,7 +1468,7 @@
 	"country_id": "18"
 }, {
 	"id": "397",
-	"name": "Silhat",
+	"name": "Sylhet",
 	"country_id": "18"
 }, {
 	"id": "398",
@@ -1484,7 +1480,7 @@
 	"country_id": "18"
 }, {
 	"id": "400",
-	"name": "Tangayal",
+	"name": "Tangail",
 	"country_id": "18"
 }, {
 	"id": "401",
