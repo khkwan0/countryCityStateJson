@@ -117,7 +117,9 @@ describe('Server / default entry (sync full dataset)', () => {
     })
 
     it('should return empty array for invalid city name', () => {
-      const cities = getCitiesByName('XX')
+      // 'XX' stopped being invalid: "XX de Setiembre" is a real town in
+      // Entre Ríos, Argentina. Use a string that prefixes no city name.
+      const cities = getCitiesByName('Zzqxv')
       expect(cities).toEqual([])
     })
   })
